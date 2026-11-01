@@ -41,3 +41,6 @@ Thumbs.db
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# visual regression
+.visual/
