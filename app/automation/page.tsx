@@ -97,7 +97,7 @@ export default function AutomationPage() {
             Division 02 &mdash; Systems &amp; Automation
           </p>
           <h1
-            className="font-serif text-[#F7F1E8] leading-[0.95] tracking-tight mb-8"
+            className="font-serif text-[#F7F1E8] leading-[0.95] tracking-tight mb-8 max-md:![font-size:clamp(2.2rem,8.5vw,4.5rem)]"
             style={{ fontSize: "clamp(2.8rem, 7vw, 7.5rem)" }}
           >
             Respond to every property enquiry before it goes cold.
@@ -111,13 +111,13 @@ export default function AutomationPage() {
           <div className="flex flex-wrap items-center gap-4">
             <Link
               href="/automation/enquiry"
-              className="bg-[#F7F1E8] text-[#6E0000] px-8 py-4 font-sans font-semibold text-xs uppercase tracking-wider hover:bg-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-[#F7F1E8] text-[#6E0000] px-8 py-4 font-sans font-semibold text-xs uppercase tracking-wider hover:bg-white transition-all hover:scale-[1.02] active:scale-[0.98] max-md:w-full max-md:text-center"
             >
               Book a Demo
             </Link>
             <a
               href="#services"
-              className="border border-[#F7F1E8]/30 hover:border-[#F7F1E8] text-[#F7F1E8] px-8 py-4 font-sans font-semibold text-xs uppercase tracking-wider transition-all hover:bg-[#F7F1E8]/10"
+              className="border border-[#F7F1E8]/30 hover:border-[#F7F1E8] text-[#F7F1E8] px-8 py-4 font-sans font-semibold text-xs uppercase tracking-wider transition-all hover:bg-[#F7F1E8]/10 max-md:w-full max-md:text-center"
             >
               Explore Services
             </a>
@@ -302,12 +302,14 @@ export default function AutomationPage() {
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-md:border-l-2 max-md:border-[#F83F41]/30 max-md:ml-4 max-md:pl-4 max-md:space-y-6 max-md:gap-0">
           {pipelineSteps.map((step) => (
             <div
               key={step.number}
-              className="border border-[#F7F1E8]/15 bg-[#540000]/40 rounded-2xl p-6 relative overflow-hidden"
+              className="border border-[#F7F1E8]/15 bg-[#540000]/40 rounded-2xl p-6 relative overflow-hidden max-md:relative"
             >
+              {/* Mobile timeline node dot */}
+              <div className="hidden max-md:block absolute -left-[23px] top-7 w-3 h-3 rounded-full bg-[#F83F41] border-2 border-[#6E0000]" />
               <div className="flex items-center justify-between mb-4">
                 <span className="font-mono text-2xl font-bold text-[#F83F41]">
                   {step.number}
@@ -340,8 +342,8 @@ export default function AutomationPage() {
         </div>
 
         <div className="border border-[#F7F1E8]/20 rounded-2xl overflow-hidden bg-[#540000]/30 backdrop-blur-sm">
-          <div className="overflow-x-auto">
-            <table className="w-full text-left font-mono text-xs">
+          <div className="overflow-x-auto w-full no-scrollbar">
+            <table className="w-full min-w-[500px] text-left font-mono text-xs">
               <thead>
                 <tr className="border-b border-[#F7F1E8]/15 text-[#F7F1E8]/50 uppercase tracking-wider">
                   <th className="py-4 px-6 font-medium">Category</th>

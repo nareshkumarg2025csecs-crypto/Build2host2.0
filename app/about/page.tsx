@@ -57,7 +57,7 @@ export default function AboutPage() {
           Studio Philosophy &amp; Practice
         </p>
         <h1
-          className="font-serif text-5xl md:text-7xl lg:text-8xl text-[#F7F1E8] leading-tight mb-8"
+          className="font-serif text-5xl md:text-7xl lg:text-8xl text-[#F7F1E8] leading-tight mb-8 max-md:text-4xl"
         >
           You imagine it. We build it.
         </h1>

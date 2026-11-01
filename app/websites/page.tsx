@@ -108,7 +108,7 @@ export default function WebsitesPage() {
             Division 01 &mdash; Websites
           </p>
           <h1
-            className="font-transcity text-[#F7F1E8] leading-[0.85] tracking-tight uppercase mb-6"
+            className="font-transcity text-[#F7F1E8] leading-[0.85] tracking-tight uppercase mb-6 max-md:![font-size:clamp(3rem,14vw,5.5rem)]"
             style={{ fontSize: "clamp(3.8rem, 14vw, 15rem)" }}
           >
             Websites
@@ -120,7 +120,7 @@ export default function WebsitesPage() {
           <div className="flex flex-wrap items-center gap-4">
             <a
               href="#packages"
-              className="bg-[#F7F1E8] text-[#E60000] px-8 py-4 font-sans font-semibold text-sm uppercase tracking-wider hover:bg-[#F9F9F9] transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-[#F7F1E8] text-[#E60000] px-8 py-4 font-sans font-semibold text-sm uppercase tracking-wider hover:bg-[#F9F9F9] transition-all hover:scale-[1.02] active:scale-[0.98] max-md:w-full max-md:text-center"
             >
               Choose a package
             </a>
@@ -128,7 +128,7 @@ export default function WebsitesPage() {
               href={websiteWa}
               target="_blank"
               rel="noopener noreferrer"
-              className="border border-[#F7F1E8]/40 hover:border-[#F7F1E8] text-[#F7F1E8] px-8 py-4 font-sans font-semibold text-sm uppercase tracking-wider transition-all hover:bg-[#F7F1E8]/10"
+              className="border border-[#F7F1E8]/40 hover:border-[#F7F1E8] text-[#F7F1E8] px-8 py-4 font-sans font-semibold text-sm uppercase tracking-wider transition-all hover:bg-[#F7F1E8]/10 max-md:w-full max-md:text-center"
             >
               WhatsApp us
             </a>
@@ -328,11 +328,14 @@ export default function WebsitesPage() {
 
         {/* Comparison Table */}
         <div className="border border-[#F7F1E8]/20 rounded-2xl overflow-hidden bg-[#B50000]/30 backdrop-blur-sm">
-          <div className="p-6 md:p-8 border-b border-[#F7F1E8]/15">
+          <div className="p-6 md:p-8 border-b border-[#F7F1E8]/15 flex items-center justify-between">
             <h3 className="font-serif text-2xl text-[#F7F1E8]">Package Comparison</h3>
+            <span className="md:hidden font-mono text-[11px] text-[#F7F1E8]/60 uppercase tracking-wider">
+              Scroll &rarr;
+            </span>
           </div>
-          <div className="overflow-x-auto">
-            <table className="w-full text-left text-sm">
+          <div className="overflow-x-auto w-full no-scrollbar">
+            <table className="w-full min-w-[560px] text-left text-sm">
               <thead>
                 <tr className="border-b border-[#F7F1E8]/15 text-[#F7F1E8]/60 font-mono text-xs uppercase">
                   <th className="py-4 px-6 font-normal">Feature</th>

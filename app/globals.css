@@ -149,3 +149,38 @@
     scrollbar-width: none;
   }
 }
+
+/* Mobile-only responsive overrides (< 768px) */
+@media (max-width: 767px) {
+  /* Lighter grain overlay for mobile GPU efficiency */
+  body::after {
+    opacity: 0.025;
+  }
+
+  /* Prevent iOS Safari 16px auto-zoom on inputs */
+  input, select, textarea {
+    font-size: 16px !important;
+  }
+
+  /* Optimize tap targets responsiveness */
+  a, button, [role="button"] {
+    touch-action: manipulation;
+  }
+
+  /* Reduced blur for mobile rendering performance */
+  .backdrop-blur-md,
+  .backdrop-blur-sm,
+  .backdrop-blur-lg,
+  .backdrop-blur-xl {
+    backdrop-filter: blur(4px) !important;
+    -webkit-backdrop-filter: blur(4px) !important;
+  }
+}
+
+@media (max-width: 767px) and (hover: none) {
+  /* Hide custom cursor on mobile touch */
+  [data-cursor], .custom-cursor {
+    display: none !important;
+  }
+}
+

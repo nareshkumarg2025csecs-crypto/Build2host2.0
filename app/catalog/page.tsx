@@ -137,7 +137,7 @@ export default function CatalogPage() {
             <p className="label-sm text-[#F7F1E8]/70 mb-2 uppercase tracking-widest">
               Standardized Studio Catalogue
             </p>
-            <h1 className="font-serif text-4xl md:text-6xl text-[#F7F1E8]">
+            <h1 className="font-serif text-4xl md:text-6xl text-[#F7F1E8] max-md:text-3xl">
               Browse All Offerings
             </h1>
             <p className="font-sans text-sm text-[#F7F1E8]/80 max-w-xl mt-3 leading-relaxed">
@@ -150,7 +150,7 @@ export default function CatalogPage() {
             <Link
               href="/catalog/print"
               target="_blank"
-              className="inline-flex items-center gap-2 bg-[#F7F1E8] text-[#E60000] px-6 py-3.5 rounded font-sans font-bold text-xs uppercase tracking-wider hover:bg-white transition-all shadow-lg"
+              className="inline-flex items-center gap-2 bg-[#F7F1E8] text-[#E60000] px-6 py-3.5 rounded font-sans font-bold text-xs uppercase tracking-wider hover:bg-white transition-all shadow-lg max-md:w-full max-md:justify-center"
             >
               <Download size={14} />
               <span>Download catalogue (PDF)</span>
@@ -166,6 +166,13 @@ export default function CatalogPage() {
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
+              onFocus={(e) => {
+                if (typeof window !== "undefined" && window.innerWidth < 768) {
+                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
+              autoComplete="off"
+              inputMode="search"
               placeholder="Search packages, add-ons, CRM integrations, SEO, voice agent..."
               className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl pl-12 pr-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/40 focus:outline-none focus:border-[#F7F1E8]"
             />
@@ -182,7 +189,7 @@ export default function CatalogPage() {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key as TabKey)}
-                className={`px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wider transition-all ${
+                className={`px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wider transition-all max-md:min-h-[44px] max-md:py-2.5 ${
                   activeTab === tab.key
                     ? "bg-[#F7F1E8] text-[#E60000] font-bold shadow-md"
                     : "bg-[#800000]/40 text-[#F7F1E8]/80 hover:bg-[#800000]/80 border border-[#F7F1E8]/10"

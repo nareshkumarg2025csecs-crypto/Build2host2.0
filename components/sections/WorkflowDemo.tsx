@@ -29,7 +29,7 @@ export function WorkflowDemo() {
           </span>
           <button
             onClick={() => setStep((prev) => (prev + 1) % 4)}
-            className="flex items-center gap-1.5 font-mono text-xs text-[#F7F1E8]/60 hover:text-[#F7F1E8] transition-colors"
+            className="flex items-center gap-1.5 font-mono text-xs text-[#F7F1E8]/60 hover:text-[#F7F1E8] transition-colors max-md:min-h-[44px] max-md:px-2"
             title="Next Step"
           >
             <RefreshCw size={12} />
@@ -142,8 +142,8 @@ export function WorkflowDemo() {
               </span>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left font-mono text-xs">
+            <div className="overflow-x-auto w-full no-scrollbar">
+              <table className="w-full min-w-[340px] text-left font-mono text-xs">
                 <thead>
                   <tr className="border-b border-[#F7F1E8]/15 text-[#F7F1E8]/50 text-[10px] uppercase">
                     <th className="pb-2">Field</th>

@@ -166,8 +166,15 @@ export function WebsiteEnquiryForm() {
             <input
               type="text"
               required
+              autoComplete="name"
+              autoCapitalize="words"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onFocus={(e) => {
+                if (typeof window !== "undefined" && window.innerWidth < 768) {
+                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
               placeholder="e.g. John Doe"
               className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
@@ -179,8 +186,15 @@ export function WebsiteEnquiryForm() {
             <input
               type="tel"
               required
+              autoComplete="tel"
+              inputMode="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              onFocus={(e) => {
+                if (typeof window !== "undefined" && window.innerWidth < 768) {
+                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
               placeholder="e.g. 98402 12345"
               className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
@@ -195,8 +209,15 @@ export function WebsiteEnquiryForm() {
             </label>
             <input
               type="email"
+              autoComplete="email"
+              inputMode="email"
               value={email}
               onChange={(e) => setEmail(e.target.value)}
+              onFocus={(e) => {
+                if (typeof window !== "undefined" && window.innerWidth < 768) {
+                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
               placeholder="you@domain.com"
               className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
@@ -207,8 +228,14 @@ export function WebsiteEnquiryForm() {
             </label>
             <input
               type="text"
+              autoComplete="organization"
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
+              onFocus={(e) => {
+                if (typeof window !== "undefined" && window.innerWidth < 768) {
+                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
               placeholder="e.g. Acme Studio"
               className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
@@ -231,7 +258,7 @@ export function WebsiteEnquiryForm() {
                 type="button"
                 key={pkg.id}
                 onClick={() => setSelectedPackage(pkg.id)}
-                className={`p-4 rounded-xl border text-left transition-all ${
+                className={`p-4 rounded-xl border text-left transition-all max-md:min-h-[52px] ${
                   selectedPackage === pkg.id
                     ? "bg-[#F7F1E8] text-[#E60000] border-[#F7F1E8] font-bold"
                     : "bg-[#800000]/40 border-[#F7F1E8]/20 text-[#F7F1E8] hover:border-[#F7F1E8]/50"
@@ -257,7 +284,7 @@ export function WebsiteEnquiryForm() {
                   type="button"
                   key={addon.name}
                   onClick={() => toggleAddon(addon.name)}
-                  className={`px-3 py-1.5 rounded-lg border text-xs font-mono transition-all flex items-center gap-1.5 ${
+                  className={`px-3 py-1.5 rounded-lg border text-xs font-mono transition-all flex items-center gap-1.5 max-md:min-h-[44px] max-md:py-2.5 max-md:px-3 ${
                     active
                       ? "bg-[#F7F1E8] text-[#E60000] border-[#F7F1E8] font-bold"
                       : "bg-[#800000]/30 border-[#F7F1E8]/20 text-[#F7F1E8]/80 hover:border-[#F7F1E8]/40"
@@ -280,7 +307,7 @@ export function WebsiteEnquiryForm() {
                 type="button"
                 key={t}
                 onClick={() => setTimeline(t)}
-                className={`p-3 rounded-lg border text-center transition-all ${
+                className={`p-3 rounded-lg border text-center transition-all max-md:min-h-[44px] ${
                   timeline === t
                     ? "bg-[#F7F1E8] text-[#E60000] border-[#F7F1E8] font-bold"
                     : "bg-[#800000]/30 border-[#F7F1E8]/20 text-[#F7F1E8]/80"
@@ -301,6 +328,11 @@ export function WebsiteEnquiryForm() {
             rows={4}
             value={description}
             onChange={(e) => setDescription(e.target.value)}
+            onFocus={(e) => {
+              if (typeof window !== "undefined" && window.innerWidth < 768) {
+                e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+              }
+            }}
             placeholder="Tell us what you want to achieve, any reference websites you like, or special features..."
             className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
           />

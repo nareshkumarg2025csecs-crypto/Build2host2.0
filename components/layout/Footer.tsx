@@ -32,7 +32,7 @@ export function Footer() {
               </span>
               <a
                 href={`mailto:${SITE.commonEmail}`}
-                className="font-mono text-xs text-[#F7F1E8] hover:text-[#F83F41] transition-colors underline"
+                className="font-mono text-xs text-[#F7F1E8] hover:text-[#F83F41] transition-colors underline max-md:py-2.5 max-md:inline-flex max-md:items-center"
               >
                 {SITE.commonEmail}
               </a>
@@ -50,7 +50,7 @@ export function Footer() {
                 <Phone size={13} className="text-[#F83F41] shrink-0" />
                 <a
                   href={`tel:+${SITE.websiteDivision.whatsapp}`}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center"
                 >
                   {SITE.websiteDivision.phoneDisplay}
                 </a>
@@ -61,7 +61,7 @@ export function Footer() {
                   href={websiteWa}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors underline"
+                  className="hover:text-white transition-colors underline max-md:py-2.5 max-md:inline-flex max-md:items-center"
                 >
                   WhatsApp Website Desk
                 </a>
@@ -70,7 +70,7 @@ export function Footer() {
                 <Mail size={13} className="text-[#F83F41] shrink-0" />
                 <a
                   href={`mailto:${SITE.websiteDivision.email}`}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center"
                 >
                   {SITE.websiteDivision.email}
                 </a>
@@ -89,7 +89,7 @@ export function Footer() {
                 <Phone size={13} className="text-[#F83F41] shrink-0" />
                 <a
                   href={`tel:+${SITE.automationDivision.whatsapp}`}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center"
                 >
                   {SITE.automationDivision.phoneDisplay}
                 </a>
@@ -100,7 +100,7 @@ export function Footer() {
                   href={automationWa}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="hover:text-white transition-colors underline"
+                  className="hover:text-white transition-colors underline max-md:py-2.5 max-md:inline-flex max-md:items-center"
                 >
                   WhatsApp Automation Desk
                 </a>
@@ -109,7 +109,7 @@ export function Footer() {
                 <Mail size={13} className="text-[#F83F41] shrink-0" />
                 <a
                   href={`mailto:${SITE.automationDivision.email}`}
-                  className="hover:text-white transition-colors"
+                  className="hover:text-white transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center"
                 >
                   {SITE.automationDivision.email}
                 </a>
@@ -121,22 +121,22 @@ export function Footer() {
         {/* Bottom Bar */}
         <div className="pt-8 border-t border-[#F7F1E8]/10 flex flex-col md:flex-row items-start md:items-center justify-between gap-6">
           <nav className="flex flex-wrap gap-6 font-mono text-xs uppercase tracking-wider text-[#F7F1E8]/60">
-            <Link href="/websites" className="hover:text-[#F7F1E8] transition-colors">
+            <Link href="/websites" className="hover:text-[#F7F1E8] transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center">
               Websites
             </Link>
-            <Link href="/automation" className="hover:text-[#F7F1E8] transition-colors">
+            <Link href="/automation" className="hover:text-[#F7F1E8] transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center">
               Automation
             </Link>
-            <Link href="/catalog" className="hover:text-[#F7F1E8] transition-colors">
+            <Link href="/catalog" className="hover:text-[#F7F1E8] transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center">
               Catalogue
             </Link>
-            <Link href="/about" className="hover:text-[#F7F1E8] transition-colors">
+            <Link href="/about" className="hover:text-[#F7F1E8] transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center">
               About
             </Link>
-            <Link href="/privacy" className="hover:text-[#F7F1E8] transition-colors">
+            <Link href="/privacy" className="hover:text-[#F7F1E8] transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center">
               Privacy
             </Link>
-            <Link href="/terms" className="hover:text-[#F7F1E8] transition-colors">
+            <Link href="/terms" className="hover:text-[#F7F1E8] transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center">
               Terms
             </Link>
           </nav>

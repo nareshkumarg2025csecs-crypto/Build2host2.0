@@ -178,8 +178,15 @@ export function AutomationEnquiryForm() {
             <input
               type="text"
               required
+              autoComplete="name"
+              autoCapitalize="words"
               value={name}
               onChange={(e) => setName(e.target.value)}
+              onFocus={(e) => {
+                if (typeof window !== "undefined" && window.innerWidth < 768) {
+                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
               placeholder="e.g. Ajay Surya"
               className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
@@ -191,8 +198,15 @@ export function AutomationEnquiryForm() {
             <input
               type="tel"
               required
+              autoComplete="tel"
+              inputMode="tel"
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
+              onFocus={(e) => {
+                if (typeof window !== "undefined" && window.innerWidth < 768) {
+                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
               placeholder="e.g. 72003 12345"
               className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
@@ -208,8 +222,14 @@ export function AutomationEnquiryForm() {
             <input
               type="text"
               required
+              autoComplete="organization"
               value={agencyName}
               onChange={(e) => setAgencyName(e.target.value)}
+              onFocus={(e) => {
+                if (typeof window !== "undefined" && window.innerWidth < 768) {
+                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
               placeholder="e.g. Apex Realty Partners"
               className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
@@ -220,8 +240,14 @@ export function AutomationEnquiryForm() {
             </label>
             <input
               type="text"
+              autoComplete="address-level2"
               value={city}
               onChange={(e) => setCity(e.target.value)}
+              onFocus={(e) => {
+                if (typeof window !== "undefined" && window.innerWidth < 768) {
+                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
               placeholder="e.g. Chennai, Bangalore, Hyderabad"
               className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
@@ -239,7 +265,7 @@ export function AutomationEnquiryForm() {
                 type="button"
                 key={vol}
                 onClick={() => setEnquiryVolume(vol)}
-                className={`p-3 rounded-lg border text-center transition-all ${
+                className={`p-3 rounded-lg border text-center transition-all max-md:min-h-[44px] ${
                   enquiryVolume === vol
                     ? "bg-[#F7F1E8] text-[#6E0000] border-[#F7F1E8] font-bold"
                     : "bg-[#3B0000]/60 border-[#F7F1E8]/20 text-[#F7F1E8]/80"
@@ -264,7 +290,7 @@ export function AutomationEnquiryForm() {
                   type="button"
                   key={service.id}
                   onClick={() => toggleService(service.id)}
-                  className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all ${
+                  className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all max-md:min-h-[52px] ${
                     active
                       ? "bg-[#F7F1E8] text-[#6E0000] border-[#F7F1E8] shadow-md"
                       : "bg-[#3B0000]/50 border-[#F7F1E8]/20 text-[#F7F1E8] hover:border-[#F7F1E8]/40"
@@ -297,6 +323,11 @@ export function AutomationEnquiryForm() {
             rows={4}
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
+            onFocus={(e) => {
+              if (typeof window !== "undefined" && window.innerWidth < 768) {
+                e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+              }
+            }}
             placeholder="Tell us what property portals you currently use, whether you have a WhatsApp API number, or your biggest lead qualification bottleneck..."
             className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
           />

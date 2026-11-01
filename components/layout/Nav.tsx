@@ -176,9 +176,35 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
               ))}
             </div>
 
-            <div className="px-8 md:px-20 pb-10 flex flex-col sm:flex-row justify-between items-start sm:items-center border-t border-[#F7F1E8]/10 pt-6 gap-4 font-mono text-xs text-[#F7F1E8]/70">
-              <p>Inquiries: {SITE.commonEmail}</p>
-              <p>Websites: {SITE.websiteDivision.phoneDisplay} &middot; Automation: {SITE.automationDivision.phoneDisplay}</p>
+            <div className="px-8 md:px-20 pb-10 flex flex-col sm:flex-row justify-between items-start sm:items-center border-t border-[#F7F1E8]/10 pt-6 gap-4 font-mono text-xs text-[#F7F1E8]/80 shrink-0">
+              <a
+                href={`mailto:${SITE.commonEmail}`}
+                className="hover:text-white transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center"
+              >
+                Inquiries: {SITE.commonEmail}
+              </a>
+              <div className="flex flex-wrap gap-4 text-xs font-mono">
+                <a
+                  href={waUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white underline transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center"
+                >
+                  WhatsApp Website Desk
+                </a>
+                <span className="opacity-30 select-none hidden sm:inline">&middot;</span>
+                <a
+                  href={makeWhatsAppUrl(
+                    SITE.automationDivision.whatsapp,
+                    "Hi built2host! I'd like to enquire about automation."
+                  )}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="hover:text-white underline transition-colors max-md:py-2.5 max-md:inline-flex max-md:items-center"
+                >
+                  WhatsApp Automation Desk
+                </a>
+              </div>
             </div>
           </motion.div>
         )}

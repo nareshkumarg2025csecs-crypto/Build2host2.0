@@ -24,6 +24,7 @@ export function TiltCard({ children, className = "" }: TiltCardProps) {
   });
 
   function handleMouseMove(e: React.MouseEvent<HTMLDivElement>) {
+    if (typeof window !== "undefined" && window.matchMedia("(max-width: 767px)").matches) return;
     if (!ref.current) return;
     const rect = ref.current.getBoundingClientRect();
     const width = rect.width;

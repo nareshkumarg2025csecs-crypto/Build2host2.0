@@ -26,11 +26,15 @@ export function OverlayCard({ children, className, index, total }: OverlayCardPr
   const opacity = useTransform(scrollYProgress, [0.7, 1], [1, 0.85]);
 
   return (
-    <div ref={ref} className="sticky" style={{ top: `${index * 20}px` }}>
+    <div
+      ref={ref}
+      className="max-md:relative md:sticky max-md:!top-0"
+      style={{ top: `${index * 20}px` }}
+    >
       <motion.div
         style={{ scale, opacity }}
         className={cn(
-          "rounded-2xl overflow-hidden",
+          "rounded-2xl overflow-hidden max-md:!transform-none max-md:!opacity-100",
           className
         )}
       >
