@@ -91,33 +91,33 @@ export default function AutomationPage() {
       />
 
       {/* ── 1. Hero ── */}
-      <section className="relative pt-28 md:pt-36 pb-16 md:pb-24 px-5 sm:px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-end min-h-[70svh] md:min-h-[85vh]">
+      <section className="relative pt-36 pb-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-end min-h-[85vh]">
         <div className="max-w-4xl relative z-10">
-          <p className="font-mono text-xs text-[#F7F1E8]/60 mb-3 md:mb-4 tracking-widest uppercase">
+          <p className="font-mono text-xs text-[#F7F1E8]/60 mb-4 tracking-widest uppercase">
             Division 02 &mdash; Systems &amp; Automation
           </p>
           <h1
-            className="font-serif text-[#F7F1E8] leading-[1.0] md:leading-[0.95] tracking-tight mb-6 md:mb-8"
-            style={{ fontSize: "clamp(2.2rem, 6.5vw, 7.5rem)" }}
+            className="font-serif text-[#F7F1E8] leading-[0.95] tracking-tight mb-8"
+            style={{ fontSize: "clamp(2.8rem, 7vw, 7.5rem)" }}
           >
             Respond to every property enquiry before it goes cold.
           </h1>
-          <p className="font-mono text-sm md:text-base text-[#F7F1E8]/80 max-w-2xl font-light mb-8 md:mb-10 leading-relaxed">
+          <p className="font-mono text-sm md:text-base text-[#F7F1E8]/80 max-w-2xl font-light mb-10 leading-relaxed">
             WhatsApp, missed-call, property-portal and AI voice automations that capture buyer
             requirements, organise leads and alert your real-estate team, so your agents can focus
             on conversations that matter.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <Link
               href="/automation/enquiry"
-              className="bg-[#F7F1E8] text-[#6E0000] px-7 py-3.5 md:px-8 md:py-4 font-sans font-semibold text-xs md:text-sm uppercase tracking-wider text-center min-h-[48px] flex items-center justify-center hover:bg-white transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-[#F7F1E8] text-[#6E0000] px-8 py-4 font-sans font-semibold text-xs uppercase tracking-wider hover:bg-white transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               Book a Demo
             </Link>
             <a
               href="#services"
-              className="border border-[#F7F1E8]/30 hover:border-[#F7F1E8] text-[#F7F1E8] px-7 py-3.5 md:px-8 md:py-4 font-sans font-semibold text-xs md:text-sm uppercase tracking-wider text-center min-h-[48px] flex items-center justify-center transition-all hover:bg-[#F7F1E8]/10"
+              className="border border-[#F7F1E8]/30 hover:border-[#F7F1E8] text-[#F7F1E8] px-8 py-4 font-sans font-semibold text-xs uppercase tracking-wider transition-all hover:bg-[#F7F1E8]/10"
             >
               Explore Services
             </a>
@@ -302,35 +302,26 @@ export default function AutomationPage() {
           </p>
         </div>
 
-        {/* Mobile vertical timeline & desktop grid */}
-        <div className="relative">
-          {/* Vertical line indicator on mobile */}
-          <div className="absolute left-6 top-6 bottom-6 w-0.5 bg-[#F83F41]/30 md:hidden" aria-hidden="true" />
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 relative">
-            {pipelineSteps.map((step) => (
-              <div
-                key={step.number}
-                className="border border-[#F7F1E8]/15 bg-[#540000]/40 rounded-2xl p-6 relative overflow-hidden pl-12 md:pl-6"
-              >
-                {/* Mobile timeline marker */}
-                <div className="absolute left-4 top-7 w-4 h-4 rounded-full bg-[#E60000] border-2 border-[#F7F1E8] md:hidden" aria-hidden="true" />
-
-                <div className="flex items-center justify-between mb-4">
-                  <span className="font-mono text-2xl font-bold text-[#F83F41]">
-                    {step.number}
-                  </span>
-                  <span className="font-mono text-[10px] text-[#F7F1E8]/40 uppercase tracking-widest">
-                    Phase
-                  </span>
-                </div>
-                <h3 className="font-serif text-2xl text-[#F7F1E8] mb-2">{step.label}</h3>
-                <p className="font-sans text-xs text-[#F7F1E8]/75 leading-relaxed">
-                  {step.description}
-                </p>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pipelineSteps.map((step) => (
+            <div
+              key={step.number}
+              className="border border-[#F7F1E8]/15 bg-[#540000]/40 rounded-2xl p-6 relative overflow-hidden"
+            >
+              <div className="flex items-center justify-between mb-4">
+                <span className="font-mono text-2xl font-bold text-[#F83F41]">
+                  {step.number}
+                </span>
+                <span className="font-mono text-[10px] text-[#F7F1E8]/40 uppercase tracking-widest">
+                  Phase
+                </span>
               </div>
-            ))}
-          </div>
+              <h3 className="font-serif text-2xl text-[#F7F1E8] mb-2">{step.label}</h3>
+              <p className="font-sans text-xs text-[#F7F1E8]/75 leading-relaxed">
+                {step.description}
+              </p>
+            </div>
+          ))}
         </div>
       </section>
 
@@ -349,14 +340,8 @@ export default function AutomationPage() {
         </div>
 
         <div className="border border-[#F7F1E8]/20 rounded-2xl overflow-hidden bg-[#540000]/30 backdrop-blur-sm">
-          <div className="p-4 border-b border-[#F7F1E8]/10 md:hidden flex items-center justify-between">
-            <span className="font-mono text-[11px] text-[#F7F1E8]/60">Lead Schema Details</span>
-            <span className="font-mono text-[11px] text-[#F7F1E8]/60 flex items-center gap-1">
-              Scroll horizontally &rarr;
-            </span>
-          </div>
-          <div className="overflow-x-auto w-full no-scrollbar">
-            <table className="w-full min-w-[540px] text-left font-mono text-xs">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left font-mono text-xs">
               <thead>
                 <tr className="border-b border-[#F7F1E8]/15 text-[#F7F1E8]/50 uppercase tracking-wider">
                   <th className="py-4 px-6 font-medium">Category</th>

@@ -26,7 +26,7 @@ export default function PrivacyPage() {
     <main className="bg-[#F9F9F9] text-[#1A0505] min-h-screen">
       <Nav />
 
-      <div className="pt-28 md:pt-36 pb-16 md:pb-24 px-5 sm:px-6 md:px-12 max-w-3xl mx-auto">
+      <div className="pt-36 pb-24 px-6 md:px-12 max-w-3xl mx-auto">
         {/* Legal Advisory Banner */}
         <div className="bg-[#FBBABD]/40 border border-[#E60000]/40 rounded-xl p-4 mb-8 flex items-start gap-3 text-xs font-mono text-[#6E0000]">
           <AlertTriangle size={16} className="shrink-0 mt-0.5" />
@@ -40,7 +40,7 @@ export default function PrivacyPage() {
         <p className="label-sm text-[#1A0505]/50 mb-2 uppercase tracking-widest">
           Regulatory &amp; Data Ethics
         </p>
-        <h1 className="font-serif text-3xl sm:text-4xl md:text-5xl text-[#1A0505] mb-4">
+        <h1 className="font-serif text-4xl md:text-5xl text-[#1A0505] mb-4">
           Privacy Policy
         </h1>
         <p className="font-mono text-xs text-[#1A0505]/60 mb-10">

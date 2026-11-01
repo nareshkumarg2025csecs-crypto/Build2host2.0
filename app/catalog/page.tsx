@@ -130,14 +130,14 @@ export default function CatalogPage() {
     <main className="bg-[#E60000] text-[#F7F1E8] min-h-screen">
       <Nav />
 
-      <div className="pt-28 md:pt-36 pb-16 md:pb-24 px-5 sm:px-6 md:px-12 max-w-7xl mx-auto">
+      <div className="pt-36 pb-24 px-6 md:px-12 max-w-7xl mx-auto">
         {/* Header */}
-        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 md:mb-12">
+        <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-12">
           <div>
             <p className="label-sm text-[#F7F1E8]/70 mb-2 uppercase tracking-widest">
               Standardized Studio Catalogue
             </p>
-            <h1 className="font-serif text-3xl sm:text-4xl md:text-6xl text-[#F7F1E8]">
+            <h1 className="font-serif text-4xl md:text-6xl text-[#F7F1E8]">
               Browse All Offerings
             </h1>
             <p className="font-sans text-sm text-[#F7F1E8]/80 max-w-xl mt-3 leading-relaxed">
@@ -150,7 +150,7 @@ export default function CatalogPage() {
             <Link
               href="/catalog/print"
               target="_blank"
-              className="inline-flex items-center justify-center gap-2 bg-[#F7F1E8] text-[#E60000] px-6 py-3.5 rounded font-sans font-bold text-xs uppercase tracking-wider hover:bg-white transition-all shadow-lg min-h-[44px] w-full sm:w-auto"
+              className="inline-flex items-center gap-2 bg-[#F7F1E8] text-[#E60000] px-6 py-3.5 rounded font-sans font-bold text-xs uppercase tracking-wider hover:bg-white transition-all shadow-lg"
             >
               <Download size={14} />
               <span>Download catalogue (PDF)</span>
@@ -159,15 +159,15 @@ export default function CatalogPage() {
         </div>
 
         {/* Search & Filter Bar */}
-        <div className="bg-[#B50000]/40 border border-[#F7F1E8]/20 rounded-2xl p-4 md:p-6 mb-10 md:mb-12 backdrop-blur-sm space-y-4">
+        <div className="bg-[#B50000]/40 border border-[#F7F1E8]/20 rounded-2xl p-4 md:p-6 mb-12 backdrop-blur-sm space-y-4">
           <div className="relative">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 text-[#F7F1E8]/40" size={18} />
             <input
               type="text"
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              placeholder="Search packages, add-ons, CRM, voice agent..."
-              className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl pl-12 pr-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/40 focus:outline-none focus:border-[#F7F1E8]"
+              placeholder="Search packages, add-ons, CRM integrations, SEO, voice agent..."
+              className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl pl-12 pr-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/40 focus:outline-none focus:border-[#F7F1E8]"
             />
           </div>
 
@@ -182,7 +182,7 @@ export default function CatalogPage() {
               <button
                 key={tab.key}
                 onClick={() => setActiveTab(tab.key as TabKey)}
-                className={`min-h-[44px] px-3.5 py-2 rounded-lg text-xs font-mono uppercase tracking-wider transition-all ${
+                className={`px-4 py-2 rounded-lg text-xs font-mono uppercase tracking-wider transition-all ${
                   activeTab === tab.key
                     ? "bg-[#F7F1E8] text-[#E60000] font-bold shadow-md"
                     : "bg-[#800000]/40 text-[#F7F1E8]/80 hover:bg-[#800000]/80 border border-[#F7F1E8]/10"

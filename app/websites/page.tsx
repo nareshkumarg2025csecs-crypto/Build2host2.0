@@ -102,25 +102,25 @@ export default function WebsitesPage() {
       <Nav />
 
       {/* ── 1. Hero ── */}
-      <section className="relative pt-28 md:pt-36 pb-16 md:pb-24 px-5 sm:px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-end min-h-[70svh] md:min-h-[85vh]">
+      <section className="relative pt-36 pb-24 px-6 md:px-12 max-w-7xl mx-auto flex flex-col justify-end min-h-[85vh]">
         <div className="max-w-4xl">
-          <p className="label-sm text-[#F7F1E8]/70 mb-3 md:mb-4 tracking-widest uppercase">
+          <p className="label-sm text-[#F7F1E8]/70 mb-4 tracking-widest uppercase">
             Division 01 &mdash; Websites
           </p>
           <h1
-            className="font-transcity text-[#F7F1E8] leading-[0.9] md:leading-[0.85] tracking-tight uppercase mb-5 md:mb-6"
-            style={{ fontSize: "clamp(2.75rem, 11vw, 15rem)" }}
+            className="font-transcity text-[#F7F1E8] leading-[0.85] tracking-tight uppercase mb-6"
+            style={{ fontSize: "clamp(3.8rem, 14vw, 15rem)" }}
           >
             Websites
           </h1>
-          <p className="font-serif italic text-xl sm:text-2xl md:text-4xl text-[#F7F1E8]/90 max-w-2xl font-light mb-8 md:mb-10 leading-tight">
+          <p className="font-serif italic text-2xl md:text-4xl text-[#F7F1E8]/90 max-w-2xl font-light mb-10 leading-tight">
             Fast, secure, search-ready websites at honest, fixed prices.
           </p>
 
-          <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 sm:gap-4">
+          <div className="flex flex-wrap items-center gap-4">
             <a
               href="#packages"
-              className="bg-[#F7F1E8] text-[#E60000] px-7 py-3.5 md:px-8 md:py-4 font-sans font-semibold text-xs md:text-sm uppercase tracking-wider text-center min-h-[48px] flex items-center justify-center hover:bg-[#F9F9F9] transition-all hover:scale-[1.02] active:scale-[0.98]"
+              className="bg-[#F7F1E8] text-[#E60000] px-8 py-4 font-sans font-semibold text-sm uppercase tracking-wider hover:bg-[#F9F9F9] transition-all hover:scale-[1.02] active:scale-[0.98]"
             >
               Choose a package
             </a>
@@ -128,7 +128,7 @@ export default function WebsitesPage() {
               href={websiteWa}
               target="_blank"
               rel="noopener noreferrer"
-              className="border border-[#F7F1E8]/40 hover:border-[#F7F1E8] text-[#F7F1E8] px-7 py-3.5 md:px-8 md:py-4 font-sans font-semibold text-xs md:text-sm uppercase tracking-wider text-center min-h-[48px] flex items-center justify-center transition-all hover:bg-[#F7F1E8]/10"
+              className="border border-[#F7F1E8]/40 hover:border-[#F7F1E8] text-[#F7F1E8] px-8 py-4 font-sans font-semibold text-sm uppercase tracking-wider transition-all hover:bg-[#F7F1E8]/10"
             >
               WhatsApp us
             </a>
@@ -328,14 +328,11 @@ export default function WebsitesPage() {
 
         {/* Comparison Table */}
         <div className="border border-[#F7F1E8]/20 rounded-2xl overflow-hidden bg-[#B50000]/30 backdrop-blur-sm">
-          <div className="p-5 md:p-8 border-b border-[#F7F1E8]/15 flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+          <div className="p-6 md:p-8 border-b border-[#F7F1E8]/15">
             <h3 className="font-serif text-2xl text-[#F7F1E8]">Package Comparison</h3>
-            <span className="font-mono text-[11px] text-[#F7F1E8]/60 md:hidden flex items-center gap-1">
-              Scroll horizontally &rarr;
-            </span>
           </div>
-          <div className="overflow-x-auto w-full no-scrollbar">
-            <table className="w-full min-w-[600px] text-left text-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-left text-sm">
               <thead>
                 <tr className="border-b border-[#F7F1E8]/15 text-[#F7F1E8]/60 font-mono text-xs uppercase">
                   <th className="py-4 px-6 font-normal">Feature</th>

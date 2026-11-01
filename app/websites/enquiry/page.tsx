@@ -22,12 +22,12 @@ export default function WebsiteEnquiryPage() {
     <main className="bg-[#E60000] text-[#F7F1E8] min-h-screen">
       <Nav />
 
-      <div className="pt-28 md:pt-36 pb-16 md:pb-24 px-5 sm:px-6 md:px-12 max-w-4xl mx-auto">
-        <div className="text-center max-w-2xl mx-auto mb-10 md:mb-12">
+      <div className="pt-36 pb-24 px-6 md:px-12 max-w-4xl mx-auto">
+        <div className="text-center max-w-2xl mx-auto mb-12">
           <p className="label-sm text-[#F7F1E8]/70 mb-2 uppercase tracking-widest">
             Division 01 &mdash; Websites
           </p>
-          <h1 className="font-serif text-3xl sm:text-4xl md:text-6xl text-[#F7F1E8] mb-4">
+          <h1 className="font-serif text-4xl md:text-6xl text-[#F7F1E8] mb-4">
             Start Your Website Build
           </h1>
           <p className="font-sans text-sm md:text-base text-[#F7F1E8]/85 leading-relaxed">
@@ -40,7 +40,7 @@ export default function WebsiteEnquiryPage() {
               href={directWa}
               target="_blank"
               rel="noopener noreferrer"
-              className="inline-flex items-center gap-2 font-mono text-xs text-[#F7F1E8]/80 hover:text-white border border-[#F7F1E8]/20 px-4 py-2.5 min-h-[44px] rounded-full"
+              className="inline-flex items-center gap-2 font-mono text-xs text-[#F7F1E8]/80 hover:text-white border border-[#F7F1E8]/20 px-4 py-2 rounded-full"
             >
               <MessageSquare size={13} />
               <span>Direct WhatsApp: {SITE.websiteDivision.phoneDisplay}</span>

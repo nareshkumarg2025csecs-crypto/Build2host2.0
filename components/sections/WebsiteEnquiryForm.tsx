@@ -169,8 +169,7 @@ export function WebsiteEnquiryForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. John Doe"
-              autoComplete="name"
-              className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+              className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
           </div>
           <div>
@@ -183,9 +182,7 @@ export function WebsiteEnquiryForm() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="e.g. 98402 12345"
-              inputMode="tel"
-              autoComplete="tel"
-              className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+              className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
           </div>
         </div>
@@ -201,9 +198,7 @@ export function WebsiteEnquiryForm() {
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="you@domain.com"
-              inputMode="email"
-              autoComplete="email"
-              className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+              className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
           </div>
           <div>
@@ -215,8 +210,7 @@ export function WebsiteEnquiryForm() {
               value={businessName}
               onChange={(e) => setBusinessName(e.target.value)}
               placeholder="e.g. Acme Studio"
-              autoComplete="organization"
-              className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+              className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
           </div>
         </div>
@@ -226,7 +220,7 @@ export function WebsiteEnquiryForm() {
           <label className="block label-sm text-[#F7F1E8]/80 mb-3">
             Select Website Package
           </label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { id: "starter", name: "Starter", price: "₹7,999" },
               { id: "business", name: "Business", price: "₹12,999" },
@@ -237,13 +231,13 @@ export function WebsiteEnquiryForm() {
                 type="button"
                 key={pkg.id}
                 onClick={() => setSelectedPackage(pkg.id)}
-                className={`min-h-[48px] p-4 rounded-xl border text-left transition-all ${
+                className={`p-4 rounded-xl border text-left transition-all ${
                   selectedPackage === pkg.id
                     ? "bg-[#F7F1E8] text-[#E60000] border-[#F7F1E8] font-bold"
                     : "bg-[#800000]/40 border-[#F7F1E8]/20 text-[#F7F1E8] hover:border-[#F7F1E8]/50"
                 }`}
               >
-                <p className="font-serif text-lg">{pkg.name}</p>
+                <p className="text-xs font-serif text-lg">{pkg.name}</p>
                 <p className="font-mono text-xs opacity-80">{pkg.price}</p>
               </button>
             ))}
@@ -255,7 +249,7 @@ export function WebsiteEnquiryForm() {
           <label className="block label-sm text-[#F7F1E8]/80 mb-2">
             Optional Add-ons <span className="text-[#F7F1E8]/40">(Select any that apply)</span>
           </label>
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-wrap gap-2">
             {addons.slice(0, 10).map((addon) => {
               const active = selectedAddons.includes(addon.name);
               return (
@@ -263,7 +257,7 @@ export function WebsiteEnquiryForm() {
                   type="button"
                   key={addon.name}
                   onClick={() => toggleAddon(addon.name)}
-                  className={`min-h-[44px] px-3.5 py-2.5 rounded-lg border text-xs font-mono transition-all flex items-center gap-2 ${
+                  className={`px-3 py-1.5 rounded-lg border text-xs font-mono transition-all flex items-center gap-1.5 ${
                     active
                       ? "bg-[#F7F1E8] text-[#E60000] border-[#F7F1E8] font-bold"
                       : "bg-[#800000]/30 border-[#F7F1E8]/20 text-[#F7F1E8]/80 hover:border-[#F7F1E8]/40"
@@ -280,13 +274,13 @@ export function WebsiteEnquiryForm() {
         {/* Timeline */}
         <div>
           <label className="block label-sm text-[#F7F1E8]/80 mb-2">Target Timeline</label>
-          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
             {["1-2 weeks (Express)", "2-3 weeks", "1 month", "Flexible"].map((t) => (
               <button
                 type="button"
                 key={t}
                 onClick={() => setTimeline(t)}
-                className={`min-h-[44px] p-3 rounded-lg border text-center transition-all ${
+                className={`p-3 rounded-lg border text-center transition-all ${
                   timeline === t
                     ? "bg-[#F7F1E8] text-[#E60000] border-[#F7F1E8] font-bold"
                     : "bg-[#800000]/30 border-[#F7F1E8]/20 text-[#F7F1E8]/80"
@@ -308,7 +302,7 @@ export function WebsiteEnquiryForm() {
             value={description}
             onChange={(e) => setDescription(e.target.value)}
             placeholder="Tell us what you want to achieve, any reference websites you like, or special features..."
-            className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+            className="w-full bg-[#800000]/60 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
           />
         </div>
 
@@ -319,17 +313,17 @@ export function WebsiteEnquiryForm() {
             id="consent-check"
             checked={consent}
             onChange={(e) => setConsent(e.target.checked)}
-            className="mt-1 h-5 w-5 shrink-0 rounded border-[#F7F1E8]/30 bg-[#800000] accent-[#F7F1E8] focus:ring-0 cursor-pointer"
+            className="mt-1 h-4 w-4 rounded border-[#F7F1E8]/30 bg-[#800000] accent-[#F7F1E8] focus:ring-0 cursor-pointer"
           />
           <label htmlFor="consent-check" className="font-sans text-xs text-[#F7F1E8]/80 cursor-pointer leading-relaxed">
             I agree that built2host may contact me via WhatsApp or email regarding this enquiry. I
             understand that prices shown are starting prices and that full scope is approved prior
             to build. Read our{" "}
-            <Link href="/privacy" className="underline hover:text-white min-h-[44px] inline-flex items-center" target="_blank">
+            <Link href="/privacy" className="underline hover:text-white" target="_blank">
               Privacy Policy
             </Link>{" "}
             and{" "}
-            <Link href="/terms" className="underline hover:text-white min-h-[44px] inline-flex items-center" target="_blank">
+            <Link href="/terms" className="underline hover:text-white" target="_blank">
               Terms
             </Link>
             .
@@ -338,8 +332,8 @@ export function WebsiteEnquiryForm() {
 
         {/* Error notification */}
         {errorMsg && (
-          <div className="p-3.5 bg-[#3B0000] border border-[#F83F41] rounded-lg text-xs font-mono text-[#F97B7E] flex items-center gap-2">
-            <AlertCircle size={16} className="shrink-0" />
+          <div className="p-3 bg-[#3B0000] border border-[#F83F41] rounded-lg text-xs font-mono text-[#F97B7E] flex items-center gap-2">
+            <AlertCircle size={14} className="shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
@@ -349,7 +343,7 @@ export function WebsiteEnquiryForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full min-h-[48px] bg-[#F7F1E8] text-[#E60000] py-4 px-8 rounded font-sans font-bold text-xs uppercase tracking-wider hover:bg-white shadow-xl transition-all disabled:opacity-50"
+            className="w-full bg-[#F7F1E8] text-[#E60000] py-4 px-8 rounded font-sans font-bold text-xs uppercase tracking-wider hover:bg-white shadow-xl transition-all disabled:opacity-50"
           >
             {loading ? "Transmitting brief..." : "Submit Project Enquiry"}
           </button>
