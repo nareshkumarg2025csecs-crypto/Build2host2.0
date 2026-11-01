@@ -15,7 +15,7 @@ export function WorkflowDemo() {
   }, []);
 
   return (
-    <div className="border border-[#F7F1E8]/20 bg-[#540000]/60 rounded-3xl p-6 md:p-10 relative overflow-hidden backdrop-blur-md">
+    <div className="border border-[#F7F1E8]/20 bg-[#540000]/60 rounded-3xl p-4 sm:p-6 md:p-10 relative overflow-hidden backdrop-blur-md">
       <div className="flex flex-col md:flex-row md:items-center justify-between pb-6 mb-8 border-b border-[#F7F1E8]/15 gap-4">
         <div className="flex items-center gap-3">
           <div className="w-3 h-3 rounded-full bg-emerald-500 animate-pulse" />
@@ -23,16 +23,16 @@ export function WorkflowDemo() {
             Interactive Workflow Architecture
           </p>
         </div>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-3">
           <span className="font-mono text-[11px] px-3 py-1 bg-[#F7F1E8]/10 text-[#F7F1E8]/80 rounded border border-[#F7F1E8]/15">
             Sample data, not a client result.
           </span>
           <button
             onClick={() => setStep((prev) => (prev + 1) % 4)}
-            className="flex items-center gap-1.5 font-mono text-xs text-[#F7F1E8]/60 hover:text-[#F7F1E8] transition-colors"
+            className="min-h-[44px] flex items-center gap-1.5 font-mono text-xs text-[#F7F1E8]/80 hover:text-[#F7F1E8] transition-colors py-2 px-2"
             title="Next Step"
           >
-            <RefreshCw size={12} />
+            <RefreshCw size={13} />
             <span>Cycle Step</span>
           </button>
         </div>
@@ -40,7 +40,7 @@ export function WorkflowDemo() {
 
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
         {/* Panel 1: WhatsApp Conversation */}
-        <div className="lg:col-span-5 bg-[#3B0000] border border-[#F7F1E8]/15 rounded-2xl p-5 shadow-2xl flex flex-col justify-between min-h-[380px]">
+        <div className="lg:col-span-5 bg-[#3B0000] border border-[#F7F1E8]/15 rounded-2xl p-4 sm:p-5 shadow-2xl flex flex-col justify-between min-h-[380px] w-full">
           <div>
             <div className="flex items-center justify-between pb-3 mb-4 border-b border-[#F7F1E8]/10">
               <div className="flex items-center gap-2.5">
@@ -142,8 +142,8 @@ export function WorkflowDemo() {
               </span>
             </div>
 
-            <div className="overflow-x-auto">
-              <table className="w-full text-left font-mono text-xs">
+            <div className="overflow-x-auto w-full no-scrollbar">
+              <table className="w-full min-w-[420px] text-left font-mono text-xs">
                 <thead>
                   <tr className="border-b border-[#F7F1E8]/15 text-[#F7F1E8]/50 text-[10px] uppercase">
                     <th className="pb-2">Field</th>

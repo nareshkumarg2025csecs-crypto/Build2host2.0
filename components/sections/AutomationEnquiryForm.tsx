@@ -181,7 +181,8 @@ export function AutomationEnquiryForm() {
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="e.g. Ajay Surya"
-              className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+              autoComplete="name"
+              className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
           </div>
           <div>
@@ -194,7 +195,9 @@ export function AutomationEnquiryForm() {
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
               placeholder="e.g. 72003 12345"
-              className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+              inputMode="tel"
+              autoComplete="tel"
+              className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
           </div>
         </div>
@@ -211,7 +214,8 @@ export function AutomationEnquiryForm() {
               value={agencyName}
               onChange={(e) => setAgencyName(e.target.value)}
               placeholder="e.g. Apex Realty Partners"
-              className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+              autoComplete="organization"
+              className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
           </div>
           <div>
@@ -223,7 +227,7 @@ export function AutomationEnquiryForm() {
               value={city}
               onChange={(e) => setCity(e.target.value)}
               placeholder="e.g. Chennai, Bangalore, Hyderabad"
-              className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+              className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
           </div>
         </div>
@@ -233,13 +237,13 @@ export function AutomationEnquiryForm() {
           <label className="block font-mono text-xs text-[#F7F1E8]/80 mb-2 uppercase tracking-wider">
             Approximate Monthly Inbound Leads
           </label>
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
+          <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 text-xs font-mono">
             {["Under 50", "50–200 leads/mo", "200–500 leads/mo", "500+ leads/mo"].map((vol) => (
               <button
                 type="button"
                 key={vol}
                 onClick={() => setEnquiryVolume(vol)}
-                className={`p-3 rounded-lg border text-center transition-all ${
+                className={`min-h-[44px] p-3 rounded-lg border text-center transition-all ${
                   enquiryVolume === vol
                     ? "bg-[#F7F1E8] text-[#6E0000] border-[#F7F1E8] font-bold"
                     : "bg-[#3B0000]/60 border-[#F7F1E8]/20 text-[#F7F1E8]/80"
@@ -264,7 +268,7 @@ export function AutomationEnquiryForm() {
                   type="button"
                   key={service.id}
                   onClick={() => toggleService(service.id)}
-                  className={`w-full p-4 rounded-xl border text-left flex items-center justify-between transition-all ${
+                  className={`w-full min-h-[48px] p-4 rounded-xl border text-left flex items-center justify-between transition-all ${
                     active
                       ? "bg-[#F7F1E8] text-[#6E0000] border-[#F7F1E8] shadow-md"
                       : "bg-[#3B0000]/50 border-[#F7F1E8]/20 text-[#F7F1E8] hover:border-[#F7F1E8]/40"
@@ -298,7 +302,7 @@ export function AutomationEnquiryForm() {
             value={notes}
             onChange={(e) => setNotes(e.target.value)}
             placeholder="Tell us what property portals you currently use, whether you have a WhatsApp API number, or your biggest lead qualification bottleneck..."
-            className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+            className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3.5 text-base text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
           />
         </div>
 
@@ -309,17 +313,17 @@ export function AutomationEnquiryForm() {
             id="automation-consent-check"
             checked={consent}
             onChange={(e) => setConsent(e.target.checked)}
-            className="mt-1 h-4 w-4 rounded border-[#F7F1E8]/30 bg-[#3B0000] accent-[#F7F1E8] focus:ring-0 cursor-pointer"
+            className="mt-1 h-5 w-5 shrink-0 rounded border-[#F7F1E8]/30 bg-[#3B0000] accent-[#F7F1E8] focus:ring-0 cursor-pointer"
           />
           <label htmlFor="automation-consent-check" className="font-sans text-xs text-[#F7F1E8]/80 cursor-pointer leading-relaxed">
             I consent to built2host contacting me regarding this automation inquiry. I understand
             that prices shown are one-time implementation fees for a defined starter scope, and that
             WhatsApp/telephony usage is billed by respective third-party providers. Read our{" "}
-            <Link href="/privacy" className="underline hover:text-white" target="_blank">
+            <Link href="/privacy" className="underline hover:text-white min-h-[44px] inline-flex items-center" target="_blank">
               Privacy Policy
             </Link>{" "}
             and{" "}
-            <Link href="/terms" className="underline hover:text-white" target="_blank">
+            <Link href="/terms" className="underline hover:text-white min-h-[44px] inline-flex items-center" target="_blank">
               Terms
             </Link>
             .
@@ -328,8 +332,8 @@ export function AutomationEnquiryForm() {
 
         {/* Error notification */}
         {errorMsg && (
-          <div className="p-3 bg-[#2D0000] border border-[#F83F41] rounded-lg text-xs font-mono text-[#F97B7E] flex items-center gap-2">
-            <AlertCircle size={14} className="shrink-0" />
+          <div className="p-3.5 bg-[#2D0000] border border-[#F83F41] rounded-lg text-xs font-mono text-[#F97B7E] flex items-center gap-2">
+            <AlertCircle size={16} className="shrink-0" />
             <span>{errorMsg}</span>
           </div>
         )}
@@ -339,7 +343,7 @@ export function AutomationEnquiryForm() {
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-[#F7F1E8] text-[#6E0000] py-4 px-8 rounded font-sans font-bold text-xs uppercase tracking-wider hover:bg-white shadow-xl transition-all disabled:opacity-50"
+            className="w-full min-h-[48px] bg-[#F7F1E8] text-[#6E0000] py-4 px-8 rounded font-sans font-bold text-xs uppercase tracking-wider hover:bg-white shadow-xl transition-all disabled:opacity-50"
           >
             {loading ? "Registering request..." : "Book Live Demo Walkthrough"}
           </button>

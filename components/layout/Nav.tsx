@@ -29,7 +29,7 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
     <>
       <nav
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 grid grid-cols-2 md:grid-cols-[1fr_auto_1fr] items-center px-6 md:px-12 h-16 border-b transition-colors",
+          "fixed top-0 left-0 right-0 z-50 grid grid-cols-2 md:grid-cols-[1fr_auto_1fr] items-center px-5 sm:px-6 md:px-12 h-16 border-b transition-colors",
           transparent
             ? "bg-[#E60000]/90 md:bg-transparent border-[#F7F1E8]/10 backdrop-blur-sm md:backdrop-blur-none"
             : "bg-[#E60000] border-[#F7F1E8]/15 shadow-sm"
@@ -39,7 +39,7 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
         <div className="flex items-center justify-start">
           <Link
             href="/"
-            className="flex items-center no-underline shrink-0"
+            className="flex items-center no-underline shrink-0 min-h-[44px] min-w-[44px] py-1"
             aria-label="built2host studio home"
           >
             <Logo
@@ -56,26 +56,26 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
         <div className="hidden md:flex items-center justify-center gap-6 font-mono text-xs uppercase tracking-widest text-[#F7F1E8]">
           <Link
             href="/websites"
-            className="no-underline text-[#F7F1E8] hover:text-white transition-opacity hover:opacity-80"
+            className="no-underline text-[#F7F1E8] hover:text-white transition-opacity hover:opacity-80 py-2"
           >
             Websites
           </Link>
           <span className="opacity-30 select-none">|</span>
           <Link
             href="/automation"
-            className="no-underline text-[#F7F1E8] hover:text-white transition-opacity hover:opacity-80"
+            className="no-underline text-[#F7F1E8] hover:text-white transition-opacity hover:opacity-80 py-2"
           >
             Automation
           </Link>
         </div>
 
         {/* Right actions: WhatsApp + Menu button (Right column) */}
-        <div className="flex items-center justify-end gap-5">
+        <div className="flex items-center justify-end gap-3 sm:gap-5">
           <a
             href={waUrl}
             target="_blank"
             rel="noopener noreferrer"
-            className="hidden sm:inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-[#F7F1E8] no-underline border border-[#F7F1E8]/30 px-3.5 py-1.5 rounded hover:bg-[#F7F1E8] hover:text-[#E60000] transition-all"
+            className="hidden sm:inline-flex items-center gap-2 font-mono text-xs uppercase tracking-wider text-[#F7F1E8] no-underline border border-[#F7F1E8]/30 px-3.5 py-2 min-h-[44px] rounded hover:bg-[#F7F1E8] hover:text-[#E60000] transition-all"
             aria-label="Chat on WhatsApp"
           >
             <svg
@@ -92,11 +92,11 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
 
           <button
             onClick={() => setMenuOpen(true)}
-            className="flex items-center justify-center w-10 h-10 text-[#F7F1E8] hover:opacity-75 transition-opacity"
+            className="flex items-center justify-center min-w-[44px] min-h-[44px] w-11 h-11 text-[#F7F1E8] hover:opacity-75 transition-opacity rounded"
             aria-label="Open navigation menu"
             aria-expanded={menuOpen}
           >
-            <Menu size={22} aria-hidden="true" />
+            <Menu size={24} aria-hidden="true" />
           </button>
         </div>
       </nav>
@@ -109,47 +109,68 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 z-[100] bg-[#E60000] flex flex-col"
+            className="fixed inset-0 z-[100] bg-[#E60000] flex flex-col overflow-y-auto"
+            style={{ paddingBottom: "env(safe-area-inset-bottom, 1rem)" }}
           >
-            <div className="flex items-center justify-between px-6 md:px-12 h-16 border-b border-[#F7F1E8]/10">
+            <div className="flex items-center justify-between px-5 sm:px-6 md:px-12 h-16 border-b border-[#F7F1E8]/10 shrink-0">
               <Link
                 href="/"
                 onClick={() => setMenuOpen(false)}
                 aria-label="built2host home"
+                className="flex items-center min-h-[44px]"
               >
                 <Logo
                   variant="lockup"
                   tone="cream"
                   width={150}
-                  className="w-36 md:w-40"
+                  className="w-32 sm:w-36 md:w-40"
                 />
               </Link>
               <button
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center w-10 h-10 text-[#F7F1E8] hover:opacity-75 transition-opacity"
+                className="flex items-center justify-center min-w-[44px] min-h-[44px] w-11 h-11 text-[#F7F1E8] hover:opacity-75 transition-opacity rounded"
                 aria-label="Close menu"
               >
-                <X size={24} aria-hidden="true" />
+                <X size={26} aria-hidden="true" />
               </button>
             </div>
 
-            <div className="flex-1 flex flex-col justify-center px-8 md:px-20 gap-3 md:gap-5">
+            {/* Mobile Switcher Banner inside menu */}
+            <div className="md:hidden flex items-center justify-center gap-4 py-3 px-6 bg-[#C40000]/70 border-b border-[#F7F1E8]/10 font-mono text-xs uppercase tracking-widest text-[#F7F1E8]">
+              <Link
+                href="/websites"
+                onClick={() => setMenuOpen(false)}
+                className="py-2 px-3 text-[#F7F1E8] hover:underline"
+              >
+                Websites
+              </Link>
+              <span className="opacity-40">|</span>
+              <Link
+                href="/automation"
+                onClick={() => setMenuOpen(false)}
+                className="py-2 px-3 text-[#F7F1E8] hover:underline"
+              >
+                Automation
+              </Link>
+            </div>
+
+            <div className="flex-1 flex flex-col justify-center px-6 sm:px-8 md:px-20 py-8 gap-3 md:gap-5 min-h-max">
               {menuLinks.map((link, i) => (
                 <motion.div
                   key={link.href}
-                  initial={{ opacity: 0, y: 30 }}
+                  initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{
-                    delay: i * 0.05,
-                    duration: 0.4,
+                    delay: i * 0.04,
+                    duration: 0.35,
                     ease: [0.76, 0, 0.24, 1],
                   }}
                 >
                   <Link
                     href={link.href}
                     onClick={() => setMenuOpen(false)}
-                    className="block font-transcity text-[#F7F1E8] no-underline hover:opacity-75 transition-opacity uppercase"
-                    style={{ fontSize: "clamp(2.5rem, 7vw, 5.5rem)", lineHeight: 1.05 }}
+                    className="block font-transcity text-[#F7F1E8] no-underline hover:opacity-75 transition-opacity uppercase py-1.5"
+                    style={{ fontSize: "clamp(2rem, 6.5vw, 5.5rem)", lineHeight: 1.1 }}
                   >
                     {link.label}
                   </Link>
@@ -157,9 +178,19 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
               ))}
             </div>
 
-            <div className="px-8 md:px-20 pb-10 flex flex-col sm:flex-row justify-between items-start sm:items-center border-t border-[#F7F1E8]/10 pt-6 gap-4 font-mono text-xs text-[#F7F1E8]/70">
-              <p>Inquiries: {SITE.commonEmail}</p>
-              <p>Websites: {SITE.websiteDivision.phoneDisplay} &middot; Automation: {SITE.automationDivision.phoneDisplay}</p>
+            <div className="px-6 sm:px-8 md:px-20 pb-8 pt-6 flex flex-col sm:flex-row justify-between items-start sm:items-center border-t border-[#F7F1E8]/10 gap-3 font-mono text-xs text-[#F7F1E8]/80 shrink-0">
+              <a href={`mailto:${SITE.commonEmail}`} className="hover:text-white underline py-1">
+                {SITE.commonEmail}
+              </a>
+              <div className="flex flex-wrap gap-x-4 gap-y-1">
+                <a href={`tel:+${SITE.websiteDivision.whatsapp}`} className="hover:text-white py-1">
+                  Web: {SITE.websiteDivision.phoneDisplay}
+                </a>
+                <span>&middot;</span>
+                <a href={`tel:+${SITE.automationDivision.whatsapp}`} className="hover:text-white py-1">
+                  Auto: {SITE.automationDivision.phoneDisplay}
+                </a>
+              </div>
             </div>
           </motion.div>
         )}

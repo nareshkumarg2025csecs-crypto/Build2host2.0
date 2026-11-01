@@ -45,23 +45,23 @@ export default function AboutPage() {
       <Nav />
 
       {/* Hero */}
-      <section className="pt-36 pb-20 px-6 md:px-12 max-w-5xl mx-auto">
+      <section className="pt-28 md:pt-36 pb-16 md:pb-20 px-5 sm:px-6 md:px-12 max-w-5xl mx-auto">
         <Logo
           variant="lockup"
           tone="cream"
           width={180}
           priority
-          className="w-40 md:w-48 mb-8"
+          className="w-36 md:w-48 mb-6 md:mb-8"
         />
         <p className="label-sm text-[#F7F1E8]/70 mb-3 tracking-widest uppercase">
           Studio Philosophy &amp; Practice
         </p>
         <h1
-          className="font-serif text-5xl md:text-7xl lg:text-8xl text-[#F7F1E8] leading-tight mb-8"
+          className="font-serif text-4xl sm:text-5xl md:text-7xl lg:text-8xl text-[#F7F1E8] leading-tight mb-6 md:mb-8"
         >
           You imagine it. We build it.
         </h1>
-        <p className="font-serif italic text-2xl md:text-3xl text-[#F7F1E8]/90 font-light max-w-3xl leading-relaxed">
+        <p className="font-serif italic text-xl sm:text-2xl md:text-3xl text-[#F7F1E8]/90 font-light max-w-3xl leading-relaxed">
           built2host is a boutique freelance studio building fast, secure, search-ready websites and
           the real estate automations that prevent enquiries from slipping away.
         </p>
