@@ -36,23 +36,6 @@ async function capture(targetDir) {
 
     const page = await context.newPage();
 
-    // Disable css animations and hide any dynamic cursors/carousels
-    await page.addStyleTag({
-      content: `
-        *, *::before, *::after {
-          animation-delay: -1ms !important;
-          animation-duration: 1ms !important;
-          animation-iteration-count: 1 !important;
-          transition-duration: 0s !important;
-          transition-delay: 0s !important;
-          caret-color: transparent !important;
-        }
-        [data-cursor], .custom-cursor {
-          display: none !important;
-        }
-      `,
-    });
-
     for (const route of routes) {
       const url = `${baseUrl}${route.path}`;
       const filename = `${route.name}_${width}.png`;
@@ -62,6 +45,21 @@ async function capture(targetDir) {
       try {
         await page.goto(url, { waitUntil: "networkidle", timeout: 30000 });
         await page.evaluate(() => document.fonts.ready);
+
+        // Disable animations and hide cursor on current page
+        await page.addStyleTag({
+          content: `
+            *, *::before, *::after {
+              animation: none !important;
+              transition: none !important;
+              caret-color: transparent !important;
+            }
+            [data-cursor], .custom-cursor {
+              display: none !important;
+            }
+          `,
+        });
+
         // Small settle delay
         await page.waitForTimeout(300);
 
