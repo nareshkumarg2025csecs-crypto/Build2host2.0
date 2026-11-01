@@ -9,20 +9,26 @@ import { Logo } from "@/components/shared/Logo";
 export function SplitHero() {
   const [hovered, setHovered] = useState<"websites" | "automation" | null>(null);
 
+  const handleHover = (panel: "websites" | "automation" | null) => {
+    if (typeof window !== "undefined" && window.matchMedia("(hover: hover) and (min-width: 768px)").matches) {
+      setHovered(panel);
+    }
+  };
+
   return (
     <section
-      className="relative h-screen h-[100svh] min-h-screen w-full flex flex-col md:flex-row overflow-hidden select-none"
+      className="relative h-screen h-[100svh] min-h-screen w-full flex flex-col md:flex-row overflow-hidden select-none max-md:h-auto max-md:min-h-0 max-md:overflow-visible"
       aria-label="built2host — Websites and Automation"
     >
       {/* ── Left panel: Websites (Poster aesthetic) ── */}
       <motion.div
-        className="relative flex-1 h-[50svh] md:h-full bg-[#E60000] flex flex-col justify-end p-6 md:p-12 lg:p-16 overflow-hidden cursor-pointer"
+        className="relative flex-1 h-[50svh] md:h-full bg-[#E60000] flex flex-col justify-end p-6 md:p-12 lg:p-16 overflow-hidden cursor-pointer max-md:h-auto max-md:min-h-[50svh] max-md:justify-between max-md:pt-24 max-md:pb-10 max-md:px-5 max-md:overflow-visible"
         animate={{
           flex: hovered === "websites" ? 1.4 : hovered === "automation" ? 0.7 : 1,
         }}
         transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-        onHoverStart={() => setHovered("websites")}
-        onHoverEnd={() => setHovered(null)}
+        onHoverStart={() => handleHover("websites")}
+        onHoverEnd={() => handleHover(null)}
       >
         {/* Hover dim overlay */}
         <motion.div
@@ -40,19 +46,29 @@ export function SplitHero() {
           data-cursor="Enter"
         />
 
+        {/* Mobile-only studio intro block (below nav in normal flow) */}
+        <div className="md:hidden mb-8 relative z-20 pointer-events-none">
+          <p className="font-serif italic text-[#F7F1E8] text-[18px] leading-snug mb-2">
+            &ldquo;You imagine it. We build it.&rdquo;
+          </p>
+          <p className="font-sans text-[15px] text-[#F7F1E8]/90 leading-relaxed max-w-sm">
+            A small studio building fast, secure websites and the automations that keep your enquiries from going cold.
+          </p>
+        </div>
+
         <div className="relative z-20 pointer-events-none">
           <p className="font-mono text-xs text-[#F7F1E8]/60 uppercase tracking-widest mb-3 md:mb-4">
             Division 01
           </p>
 
           <h2
-            className="font-transcity text-[#F7F1E8] leading-none mb-3 tracking-normal"
+            className="font-transcity text-[#F7F1E8] leading-none mb-3 tracking-normal max-md:![font-size:clamp(2.75rem,14vw,4rem)]"
             style={{ fontSize: "clamp(3.5rem, 9vw, 9.5rem)" }}
           >
             Websites
           </h2>
 
-          <p className="font-serif italic text-[#F7F1E8]/85 text-base md:text-xl max-w-sm mb-6 leading-snug">
+          <p className="font-serif italic text-[#F7F1E8]/85 text-base md:text-xl max-w-sm mb-6 leading-snug max-md:text-[15px]">
             Fast, secure, search-ready websites at honest, fixed prices.
           </p>
 
@@ -63,9 +79,9 @@ export function SplitHero() {
         </div>
       </motion.div>
 
-      {/* ── Center brand identity: logo + manifesto (positioned below nav) ── */}
+      {/* ── Center brand identity: logo + manifesto (desktop seam, hidden on mobile) ── */}
       <div
-        className="absolute top-20 md:top-[calc(4rem+1.5rem)] left-1/2 -translate-x-1/2 z-30 pointer-events-none w-[90%] sm:w-auto max-w-[340px]"
+        className="max-md:hidden absolute top-20 md:top-[calc(4rem+1.5rem)] left-1/2 -translate-x-1/2 z-30 pointer-events-none w-[90%] sm:w-auto max-w-[340px]"
         aria-hidden="true"
       >
         <div className="flex flex-col items-center gap-3 text-center px-5 py-4 rounded-2xl bg-[#E60000]/85 border border-[#F7F1E8]/20 shadow-xl backdrop-blur-md">
@@ -87,13 +103,13 @@ export function SplitHero() {
 
       {/* ── Right panel: Automation (Systems aesthetic) ── */}
       <motion.div
-        className="relative flex-1 h-[50svh] md:h-full bg-[#6E0000] flex flex-col justify-end p-6 md:p-12 lg:p-16 overflow-hidden cursor-pointer"
+        className="relative flex-1 h-[50svh] md:h-full bg-[#6E0000] flex flex-col justify-end p-6 md:p-12 lg:p-16 overflow-hidden cursor-pointer max-md:h-auto max-md:min-h-[50svh] max-md:pt-12 max-md:pb-12 max-md:px-5 max-md:overflow-visible"
         animate={{
           flex: hovered === "automation" ? 1.4 : hovered === "websites" ? 0.7 : 1,
         }}
         transition={{ duration: 0.5, ease: [0.76, 0, 0.24, 1] }}
-        onHoverStart={() => setHovered("automation")}
-        onHoverEnd={() => setHovered(null)}
+        onHoverStart={() => handleHover("automation")}
+        onHoverEnd={() => handleHover(null)}
       >
         {/* Subtle 1px grid overlay */}
         <div
@@ -114,9 +130,9 @@ export function SplitHero() {
           aria-hidden="true"
         />
 
-        {/* Animated simulation pill loop */}
+        {/* Animated simulation pill loop (hidden on mobile) */}
         <div
-          className="absolute top-28 right-8 lg:right-12 hidden lg:flex flex-col gap-2 pointer-events-none z-10"
+          className="max-md:hidden absolute top-28 right-8 lg:right-12 hidden lg:flex flex-col gap-2 pointer-events-none z-10"
           aria-hidden="true"
         >
           <div className="bg-[#540000]/80 border border-[#F7F1E8]/15 rounded-lg px-3 py-1.5 max-w-[150px] shadow-lg">
@@ -147,13 +163,13 @@ export function SplitHero() {
           </p>
 
           <h2
-            className="font-transcity text-[#F7F1E8] leading-none mb-3 tracking-normal"
+            className="font-transcity text-[#F7F1E8] leading-none mb-3 tracking-normal max-md:![font-size:clamp(2.75rem,14vw,4rem)]"
             style={{ fontSize: "clamp(3.5rem, 9vw, 9.5rem)" }}
           >
             Automation
           </h2>
 
-          <p className="font-mono text-[#F7F1E8]/85 text-xs md:text-sm max-w-sm mb-6 leading-relaxed">
+          <p className="font-mono text-[#F7F1E8]/85 text-xs md:text-sm max-w-sm mb-6 leading-relaxed max-md:text-[14px]">
             WhatsApp, missed-call, property-portal and AI voice automations for real-estate teams.
           </p>
 
@@ -166,7 +182,7 @@ export function SplitHero() {
 
       {/* ── Scroll cue (desktop only) ── */}
       <div
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-30 hidden md:flex flex-col items-center gap-1.5 pointer-events-none"
+        className="max-md:hidden absolute bottom-6 left-1/2 -translate-x-1/2 z-30 hidden md:flex flex-col items-center gap-1.5 pointer-events-none"
         aria-hidden="true"
       >
         <span className="font-mono text-[9px] uppercase tracking-widest text-[#F7F1E8]/50">

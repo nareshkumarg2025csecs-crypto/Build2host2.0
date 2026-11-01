@@ -92,7 +92,7 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
 
           <button
             onClick={() => setMenuOpen(true)}
-            className="flex items-center justify-center w-10 h-10 text-[#F7F1E8] hover:opacity-75 transition-opacity"
+            className="flex items-center justify-center w-10 h-10 text-[#F7F1E8] hover:opacity-75 transition-opacity max-md:w-11 max-md:h-11"
             aria-label="Open navigation menu"
             aria-expanded={menuOpen}
           >
@@ -109,9 +109,9 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -16 }}
             transition={{ duration: 0.3, ease: [0.76, 0, 0.24, 1] }}
-            className="fixed inset-0 z-[100] bg-[#E60000] flex flex-col"
+            className="fixed inset-0 z-[100] bg-[#E60000] flex flex-col max-md:overflow-y-auto"
           >
-            <div className="flex items-center justify-between px-6 md:px-12 h-16 border-b border-[#F7F1E8]/10">
+            <div className="flex items-center justify-between px-6 md:px-12 h-16 border-b border-[#F7F1E8]/10 shrink-0">
               <Link
                 href="/"
                 onClick={() => setMenuOpen(false)}
@@ -126,11 +126,30 @@ export function Nav({ transparent = false }: { transparent?: boolean }) {
               </Link>
               <button
                 onClick={() => setMenuOpen(false)}
-                className="flex items-center justify-center w-10 h-10 text-[#F7F1E8] hover:opacity-75 transition-opacity"
+                className="flex items-center justify-center w-10 h-10 text-[#F7F1E8] hover:opacity-75 transition-opacity max-md:w-11 max-md:h-11"
                 aria-label="Close menu"
               >
                 <X size={24} aria-hidden="true" />
               </button>
+            </div>
+
+            {/* Mobile Switcher Banner inside menu */}
+            <div className="md:hidden flex items-center justify-center gap-4 py-3 px-6 bg-[#C40000]/70 border-b border-[#F7F1E8]/10 font-mono text-xs uppercase tracking-widest text-[#F7F1E8] shrink-0">
+              <Link
+                href="/websites"
+                onClick={() => setMenuOpen(false)}
+                className="py-2 px-3 text-[#F7F1E8] hover:underline"
+              >
+                Websites
+              </Link>
+              <span className="opacity-40">|</span>
+              <Link
+                href="/automation"
+                onClick={() => setMenuOpen(false)}
+                className="py-2 px-3 text-[#F7F1E8] hover:underline"
+              >
+                Automation
+              </Link>
             </div>
 
             <div className="flex-1 flex flex-col justify-center px-8 md:px-20 gap-3 md:gap-5">
