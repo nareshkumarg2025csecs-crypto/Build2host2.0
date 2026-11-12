@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "health": "tsx scripts/health-check.ts"
   },
   "dependencies": {
     "@hookform/resolvers": "^7.0.0",
@@ -47,6 +48,7 @@
     "pngjs": "^7.0.0",
     "postcss": "^8.5.32",
     "tailwindcss": "^4",
+    "tsx": "^4.23.15",
     "typescript": "^5"
   }
 }

@@ -1,6 +1,7 @@
 import React from "react";
 import Link from "next/link";
 import { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { Logo } from "@/components/shared/Logo";
 
 export const metadata: Metadata = {
@@ -12,6 +13,9 @@ export const metadata: Metadata = {
 };
 
 export default function TypeSpecimenPage() {
+  if (process.env.NODE_ENV === "production") {
+    notFound();
+  }
   return (
     <main className="bg-[#E60000] text-[#F7F1E8] min-h-screen p-8 md:p-16">
       <div className="max-w-4xl mx-auto space-y-16">

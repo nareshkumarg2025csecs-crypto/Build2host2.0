@@ -6,11 +6,68 @@ let adminAppInstance: App | null = null;
 let adminDbInstance: Firestore | null = null;
 let adminAuthInstance: Auth | null = null;
 
+export function cleanPrivateKey(rawKey?: string): string {
+  if (!rawKey) return "";
+  let key = rawKey.trim();
+
+  // Strip wrapping single or double quotes if present
+  if (
+    (key.startsWith('"') && key.endsWith('"')) ||
+    (key.startsWith("'") && key.endsWith("'"))
+  ) {
+    key = key.slice(1, -1);
+  }
+
+  // Convert literal \n or escaped \\n to real newlines
+  key = key.replace(/\\n/g, "\n");
+
+  return key;
+}
+
+export function validatePrivateKeyFormat(rawKey?: string): {
+  valid: boolean;
+  hasBeginMarker: boolean;
+  hasRealNewlines: boolean;
+  hasWrappingQuotes: boolean;
+  error?: string;
+} {
+  if (!rawKey || !rawKey.trim()) {
+    return {
+      valid: false,
+      hasBeginMarker: false,
+      hasRealNewlines: false,
+      hasWrappingQuotes: false,
+      error: "Private key is empty or missing",
+    };
+  }
+
+  const trimmed = rawKey.trim();
+  const hasWrappingQuotes =
+    (trimmed.startsWith('"') && trimmed.endsWith('"')) ||
+    (trimmed.startsWith("'") && trimmed.endsWith("'"));
+
+  const cleaned = cleanPrivateKey(rawKey);
+  const hasBeginMarker = cleaned.startsWith("-----BEGIN PRIVATE KEY-----");
+  const hasRealNewlines = cleaned.includes("\n");
+
+  const valid = hasBeginMarker && hasRealNewlines;
+
+  return {
+    valid,
+    hasBeginMarker,
+    hasRealNewlines,
+    hasWrappingQuotes,
+    error: valid
+      ? undefined
+      : "Private key must start with '-----BEGIN PRIVATE KEY-----' and contain real newlines",
+  };
+}
+
 export function getMissingAdminEnv(): string[] {
   const missing: string[] = [];
-  if (!process.env.FIREBASE_PROJECT_ID) missing.push("FIREBASE_PROJECT_ID");
-  if (!process.env.FIREBASE_CLIENT_EMAIL) missing.push("FIREBASE_CLIENT_EMAIL");
-  if (!process.env.FIREBASE_PRIVATE_KEY) missing.push("FIREBASE_PRIVATE_KEY");
+  if (!process.env.FIREBASE_PROJECT_ID?.trim()) missing.push("FIREBASE_PROJECT_ID");
+  if (!process.env.FIREBASE_CLIENT_EMAIL?.trim()) missing.push("FIREBASE_CLIENT_EMAIL");
+  if (!process.env.FIREBASE_PRIVATE_KEY?.trim()) missing.push("FIREBASE_PRIVATE_KEY");
   return missing;
 }
 
@@ -23,29 +80,33 @@ export function initAdmin(): { app: App; db: Firestore; auth: Auth } {
     return { app: adminAppInstance, db: adminDbInstance, auth: adminAuthInstance };
   }
 
-  const projectId = process.env.FIREBASE_PROJECT_ID;
-  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-  let privateKey = process.env.FIREBASE_PRIVATE_KEY;
-
   const missing = getMissingAdminEnv();
   if (missing.length > 0) {
     const err = `[Firebase Admin] Missing required environment variables: ${missing.join(", ")}`;
-    console.error(err);
     throw new Error(err);
   }
 
-  // Handle both literal newlines and escaped "\n" characters in private key
-  if (privateKey) {
-    privateKey = privateKey.replace(/\\n/g, "\n");
+  const projectId = process.env.FIREBASE_PROJECT_ID!.trim();
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL!.trim();
+  const privateKey = cleanPrivateKey(process.env.FIREBASE_PRIVATE_KEY);
+
+  const keyCheck = validatePrivateKeyFormat(privateKey);
+  if (!keyCheck.valid) {
+    throw new Error(`[Firebase Admin] Invalid private key format: ${keyCheck.error}`);
   }
 
-  adminAppInstance = initializeApp({
-    credential: cert({
-      projectId,
-      clientEmail,
-      privateKey,
-    }),
-  });
+  try {
+    adminAppInstance = initializeApp({
+      credential: cert({
+        projectId,
+        clientEmail,
+        privateKey,
+      }),
+    });
+  } catch (err: unknown) {
+    const msg = err instanceof Error ? err.message : String(err);
+    throw new Error(`[Firebase Admin] Failed to initialize App: ${msg}`);
+  }
 
   adminDbInstance = getFirestore(adminAppInstance);
   adminAuthInstance = getAuth(adminAppInstance);

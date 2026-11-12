@@ -7,8 +7,8 @@ import {
   checkRateLimit,
   sanitize,
 } from "@/lib/enquiry";
-import { EnquiryDoc } from "@/lib/types/enquiry";
-import { sendEnquiryEmails } from "@/lib/email/sender";
+import { EnquiryDoc, EnquiryEmailStatus } from "@/lib/types/enquiry";
+import { sendEnquiryEmails, sendFallbackLeadEmail } from "@/lib/email/sender";
 
 const enquirySchema = z.object({
   type: z.enum(["websites", "automation"]),
@@ -42,6 +42,7 @@ export async function POST(req: NextRequest) {
 
     // Rate limit: 5 submissions per hour per hashed IP
     if (checkRateLimit(hashedIp, 5, 60 * 60 * 1000)) {
+      console.warn(`[enquiry:rate-limit] Submission rejected: rate limit exceeded for hashed IP: ${hashedIp}`);
       return NextResponse.json(
         { error: "Too many requests. Please try again shortly or contact us via WhatsApp." },
         { status: 429 }
@@ -51,12 +52,14 @@ export async function POST(req: NextRequest) {
     let rawBody;
     try {
       rawBody = await req.json();
-    } catch {
+    } catch (parseErr) {
+      console.warn(`[enquiry:body] Failed to parse request JSON:`, parseErr);
       return NextResponse.json({ error: "Invalid JSON format" }, { status: 400 });
     }
 
     const parseResult = enquirySchema.safeParse(rawBody);
     if (!parseResult.success) {
+      console.warn(`[enquiry:validation] Validation error:`, parseResult.error.flatten().fieldErrors);
       return NextResponse.json(
         {
           error: "Validation failed",
@@ -71,24 +74,14 @@ export async function POST(req: NextRequest) {
     // Time-trap spam protection: minimum 2.5 seconds human deliberation
     const elapsedMs = Date.now() - data.submittedAt;
     if (elapsedMs < 2500) {
+      console.warn(`[enquiry:time-trap] Submission too fast (${elapsedMs}ms < 2500ms) for IP ${hashedIp}`);
       return NextResponse.json(
         { error: "Submission too fast. Please take your time." },
         { status: 422 }
       );
     }
 
-    // Check Firebase configuration
-    const missingAdminEnv = getMissingAdminEnv();
-    if (missingAdminEnv.length > 0) {
-      console.error(
-        `[Enquiry Handler] Cannot store enquiry: missing Firebase Admin environment variables: ${missingAdminEnv.join(", ")}`
-      );
-      return NextResponse.json(
-        { error: "Enquiry storage service is temporarily unavailable. Please reach us directly on WhatsApp." },
-        { status: 503 }
-      );
-    }
-
+    // Build the enquiry document
     const ref = generateEnquiryRef(data.type);
     const nowIso = new Date().toISOString();
     const userAgent = (req.headers.get("user-agent") || "").slice(0, 200);
@@ -133,20 +126,82 @@ export async function POST(req: NextRequest) {
       ],
     };
 
+    // Check Firebase environment configuration
+    const missingAdminEnv = getMissingAdminEnv();
+    if (missingAdminEnv.length > 0) {
+      console.error(
+        `[enquiry:env] Missing required Firebase Admin environment variables: ${missingAdminEnv.join(", ")}`
+      );
+
+      // Lead protection: attempt to email team directly so lead is never lost
+      await sendFallbackLeadEmail(
+        enquiryDoc,
+        `Missing Firebase Admin environment variables: ${missingAdminEnv.join(", ")}`
+      );
+
+      return NextResponse.json(
+        { error: "Enquiry storage service is temporarily unavailable. Please reach us directly on WhatsApp." },
+        { status: 503 }
+      );
+    }
+
+    // Initialize Firebase Admin DB
+    let db;
+    try {
+      db = getAdminDb();
+    } catch (initErr: unknown) {
+      console.error(`[enquiry:firebase-init] Failed to initialize Firebase Admin SDK:`, {
+        code: (initErr as any)?.code || (initErr as any)?.name || "INIT_FAILED",
+        message: initErr instanceof Error ? initErr.message : String(initErr),
+        stack: initErr instanceof Error ? initErr.stack : undefined,
+      });
+
+      // Lead protection: send backup lead email to team
+      await sendFallbackLeadEmail(
+        enquiryDoc,
+        `Firebase Admin SDK initialization failure: ${initErr instanceof Error ? initErr.message : String(initErr)}`
+      );
+
+      return NextResponse.json(
+        { error: "Enquiry storage service is temporarily unavailable. Please reach us directly on WhatsApp." },
+        { status: 503 }
+      );
+    }
+
     // Write to Firestore with Admin SDK
     try {
-      const db = getAdminDb();
       await db.collection("enquiries").doc(ref).set(enquiryDoc);
-    } catch (dbErr) {
-      console.error("[Firestore Error] Failed to write enquiry to Firestore:", dbErr);
+    } catch (dbErr: unknown) {
+      console.error(`[enquiry:firestore-write] Failed to write enquiry ${ref} to Firestore:`, {
+        code: (dbErr as any)?.code || "FIRESTORE_WRITE_ERROR",
+        message: dbErr instanceof Error ? dbErr.message : String(dbErr),
+        stack: dbErr instanceof Error ? dbErr.stack : undefined,
+      });
+
+      // Lead protection: send backup lead email to team so lead is not lost
+      await sendFallbackLeadEmail(
+        enquiryDoc,
+        `Firestore write failure: ${dbErr instanceof Error ? dbErr.message : String(dbErr)}`
+      );
+
       return NextResponse.json(
-        { error: "Failed to save your enquiry. Please reach out to us via WhatsApp." },
+        { error: "Enquiry storage service is temporarily unavailable. Please reach us directly on WhatsApp." },
         { status: 500 }
       );
     }
 
-    // Send emails (Promise.allSettled handles errors internally and updates emailStatus in Firestore)
-    const emailStatus = await sendEnquiryEmails(enquiryDoc);
+    // Independent email sending: enquiry is safely stored in Firestore
+    let emailStatus: EnquiryEmailStatus = "sent";
+    try {
+      emailStatus = await sendEnquiryEmails(enquiryDoc);
+    } catch (emailErr: unknown) {
+      console.error(`[enquiry:email] Uncaught email dispatch error for ${ref}:`, {
+        code: (emailErr as any)?.code,
+        message: emailErr instanceof Error ? emailErr.message : String(emailErr),
+        stack: emailErr instanceof Error ? emailErr.stack : undefined,
+      });
+      emailStatus = "failed";
+    }
 
     return NextResponse.json({
       ok: true,
@@ -154,7 +209,14 @@ export async function POST(req: NextRequest) {
       emailStatus,
     });
   } catch (err: unknown) {
-    console.error("[Enquiry Handler Exception]:", err);
-    return NextResponse.json({ error: "Internal server error" }, { status: 500 });
+    console.error("[enquiry:unhandled] Unexpected exception in enquiry route:", {
+      code: (err as any)?.code,
+      message: err instanceof Error ? err.message : String(err),
+      stack: err instanceof Error ? err.stack : undefined,
+    });
+    return NextResponse.json(
+      { error: "Enquiry storage service is temporarily unavailable. Please reach us directly on WhatsApp." },
+      { status: 500 }
+    );
   }
 }
