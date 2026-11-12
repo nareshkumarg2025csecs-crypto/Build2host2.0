@@ -16,7 +16,7 @@ const routes = [
   { path: "/terms", name: "terms" },
 ];
 
-const widths = [768, 1024, 1280, 1440, 1920];
+const widths = [390, 768, 1024, 1440, 1920];
 const baseUrl = process.env.BASE_URL || "http://localhost:3000";
 
 const mode = process.argv[2] || "baseline"; // 'baseline' | 'after' | 'compare'

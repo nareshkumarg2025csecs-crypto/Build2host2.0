@@ -26,6 +26,8 @@ export function WebsiteEnquiryForm() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [refId, setRefId] = useState("");
+  const [emailSent, setEmailSent] = useState(true);
 
   useEffect(() => {
     setSubmittedAt(Date.now());
@@ -49,6 +51,10 @@ export function WebsiteEnquiryForm() {
       setErrorMsg("Please provide a valid 10-digit phone number");
       return;
     }
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setErrorMsg("Please provide a valid email address");
+      return;
+    }
     if (!consent) {
       setErrorMsg("Please accept the terms and privacy consent to proceed");
       return;
@@ -64,7 +70,7 @@ export function WebsiteEnquiryForm() {
           type: "websites",
           name: name.trim(),
           phone: phone.trim(),
-          email: email.trim() || undefined,
+          email: email.trim(),
           businessName: businessName.trim() || undefined,
           package: selectedPackage,
           addons: selectedAddons,
@@ -76,11 +82,13 @@ export function WebsiteEnquiryForm() {
         }),
       });
 
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Failed to submit enquiry");
       }
 
+      setRefId(data.ref || "");
+      setEmailSent(data.emailStatus !== "failed");
       setSubmitted(true);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Something went wrong";
@@ -93,7 +101,8 @@ export function WebsiteEnquiryForm() {
   const buildWhatsAppMessage = () => {
     const pkgName = selectedPackage.toUpperCase();
     const addonList = selectedAddons.length > 0 ? selectedAddons.join(", ") : "None";
-    return `Hi built2host! I just submitted an enquiry for a Website.\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Business:* ${businessName || "N/A"}\n*Package:* ${pkgName}\n*Add-ons:* ${addonList}\n*Timeline:* ${timeline}\n*Notes:* ${description || "Discuss on chat"}\n\nLooking forward to hearing from your team!`;
+    const refStr = refId ? `\n*Reference:* ${refId}` : "";
+    return `Hi built2host! I just submitted an enquiry for a Website.${refStr}\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Email:* ${email}\n*Business:* ${businessName || "N/A"}\n*Package:* ${pkgName}\n*Add-ons:* ${addonList}\n*Timeline:* ${timeline}\n*Notes:* ${description || "Discuss on chat"}\n\nLooking forward to hearing from your team!`;
   };
 
   const whatsappRedirectUrl = makeWhatsAppUrl(
@@ -107,13 +116,28 @@ export function WebsiteEnquiryForm() {
         <div className="w-16 h-16 rounded-full bg-[#F7F1E8] text-[#E60000] flex items-center justify-center mx-auto mb-6">
           <Check size={32} />
         </div>
-        <h2 className="font-serif text-3xl md:text-4xl text-[#F7F1E8] mb-4">
+        <h2 className="font-serif text-3xl md:text-4xl text-[#F7F1E8] mb-3">
           Enquiry Received
         </h2>
+        {refId && (
+          <div className="inline-block bg-[#800000]/60 border border-[#F7F1E8]/30 rounded-lg px-4 py-1.5 font-mono text-xs text-[#F7F1E8] tracking-wider mb-4">
+            Reference: <span className="font-bold text-white">{refId}</span>
+          </div>
+        )}
         <p className="font-sans text-sm text-[#F7F1E8]/85 mb-8 leading-relaxed">
-          Thank you, <span className="font-bold text-[#F7F1E8]">{name}</span>. We review every brief
-          thoroughly. To fast-track your quotation and discuss scope, jump straight into WhatsApp
-          with our Website Division.
+          {emailSent ? (
+            <>
+              A confirmation has been sent to{" "}
+              <span className="font-bold text-[#F7F1E8]">{email}</span>. We review every brief
+              thoroughly. To fast-track your quotation and discuss scope, jump straight into WhatsApp
+              with our Website Division.
+            </>
+          ) : (
+            <>
+              We couldn&apos;t send the confirmation email, but we have your enquiry and will reply on WhatsApp.
+              To fast-track your quotation and discuss scope, jump straight into WhatsApp with our Website Division.
+            </>
+          )}
         </p>
 
         <div className="space-y-4">
@@ -205,10 +229,11 @@ export function WebsiteEnquiryForm() {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <div>
             <label className="block label-sm text-[#F7F1E8]/80 mb-2">
-              Email Address <span className="text-[#F7F1E8]/40">(Optional)</span>
+              Email Address <span className="text-[#FBBABD]">*</span>
             </label>
             <input
               type="email"
+              required
               autoComplete="email"
               inputMode="email"
               value={email}

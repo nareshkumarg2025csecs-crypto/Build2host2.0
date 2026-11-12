@@ -13,6 +13,7 @@ export function AutomationEnquiryForm() {
 
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [email, setEmail] = useState("");
   const [agencyName, setAgencyName] = useState("");
   const [city, setCity] = useState("");
   const [enquiryVolume, setEnquiryVolume] = useState("50–200 leads/mo");
@@ -25,6 +26,8 @@ export function AutomationEnquiryForm() {
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
+  const [refId, setRefId] = useState("");
+  const [emailSent, setEmailSent] = useState(true);
 
   useEffect(() => {
     setSubmittedAt(Date.now());
@@ -50,6 +53,10 @@ export function AutomationEnquiryForm() {
       setErrorMsg("Please enter a valid 10-digit phone number");
       return;
     }
+    if (!email.trim() || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      setErrorMsg("Please enter a valid email address");
+      return;
+    }
     if (!agencyName.trim()) {
       setErrorMsg("Please enter your real estate agency or company name");
       return;
@@ -73,6 +80,7 @@ export function AutomationEnquiryForm() {
           type: "automation",
           name: name.trim(),
           phone: phone.trim(),
+          email: email.trim(),
           agencyName: agencyName.trim(),
           city: city.trim() || undefined,
           enquiryVolume,
@@ -84,11 +92,13 @@ export function AutomationEnquiryForm() {
         }),
       });
 
+      const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        const data = await res.json().catch(() => ({}));
         throw new Error(data.error || "Failed to submit demo request");
       }
 
+      setRefId(data.ref || "");
+      setEmailSent(data.emailStatus !== "failed");
       setSubmitted(true);
     } catch (err: unknown) {
       const msg = err instanceof Error ? err.message : "Something went wrong";
@@ -106,7 +116,8 @@ export function AutomationEnquiryForm() {
       })
       .join(", ");
 
-    return `Hi built2host! I just submitted an enquiry for Real Estate Automation.\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Agency:* ${agencyName}\n*City:* ${city || "N/A"}\n*Monthly Enquiries:* ${enquiryVolume}\n*Selected Services:* ${serviceList}\n*Notes:* ${notes || "Discuss on chat"}\n\nCan we arrange a live demo?`;
+    const refStr = refId ? `\n*Reference:* ${refId}` : "";
+    return `Hi built2host! I just submitted an enquiry for Real Estate Automation.${refStr}\n\n*Name:* ${name}\n*Phone:* ${phone}\n*Email:* ${email}\n*Agency:* ${agencyName}\n*City:* ${city || "N/A"}\n*Monthly Enquiries:* ${enquiryVolume}\n*Selected Services:* ${serviceList}\n*Notes:* ${notes || "Discuss on chat"}\n\nCan we arrange a live demo?`;
   };
 
   const whatsappRedirectUrl = makeWhatsAppUrl(
@@ -120,13 +131,28 @@ export function AutomationEnquiryForm() {
         <div className="w-16 h-16 rounded-full bg-[#F7F1E8] text-[#6E0000] flex items-center justify-center mx-auto mb-6">
           <Check size={32} />
         </div>
-        <h2 className="font-serif text-3xl md:text-4xl text-[#F7F1E8] mb-4">
-          Demo Request Registered
+        <h2 className="font-serif text-3xl md:text-4xl text-[#F7F1E8] mb-3">
+          Enquiry Received
         </h2>
+        {refId && (
+          <div className="inline-block bg-[#3B0000]/80 border border-[#F7F1E8]/30 rounded-lg px-4 py-1.5 font-mono text-xs text-[#F7F1E8] tracking-wider mb-4">
+            Reference: <span className="font-bold text-white">{refId}</span>
+          </div>
+        )}
         <p className="font-sans text-sm text-[#F7F1E8]/85 mb-8 leading-relaxed">
-          Thank you, <span className="font-bold text-[#F7F1E8]">{name}</span>. We prepare tailored
-          walkthroughs based on your agency&apos;s lead channels. Connect directly on WhatsApp to
-          confirm a 15-minute slot.
+          {emailSent ? (
+            <>
+              A confirmation has been sent to{" "}
+              <span className="font-bold text-[#F7F1E8]">{email}</span>. We prepare tailored
+              walkthroughs based on your agency&apos;s lead channels. Connect directly on WhatsApp to
+              confirm a 15-minute slot.
+            </>
+          ) : (
+            <>
+              We couldn&apos;t send the confirmation email, but we have your enquiry and will reply on WhatsApp.
+              Connect directly on WhatsApp to confirm a 15-minute slot.
+            </>
+          )}
         </p>
 
         <div className="space-y-4">
@@ -213,8 +239,28 @@ export function AutomationEnquiryForm() {
           </div>
         </div>
 
-        {/* Agency Name & City */}
+        {/* Email & Agency Name */}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label className="block font-mono text-xs text-[#F7F1E8]/80 mb-2 uppercase tracking-wider">
+              Work Email Address <span className="text-[#FBBABD]">*</span>
+            </label>
+            <input
+              type="email"
+              required
+              autoComplete="email"
+              inputMode="email"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              onFocus={(e) => {
+                if (typeof window !== "undefined" && window.innerWidth < 768) {
+                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+                }
+              }}
+              placeholder="e.g. ajay@apexrealty.com"
+              className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+            />
+          </div>
           <div>
             <label className="block font-mono text-xs text-[#F7F1E8]/80 mb-2 uppercase tracking-wider">
               Real Estate Agency / Firm Name <span className="text-[#FBBABD]">*</span>
@@ -234,24 +280,26 @@ export function AutomationEnquiryForm() {
               className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
             />
           </div>
-          <div>
-            <label className="block font-mono text-xs text-[#F7F1E8]/80 mb-2 uppercase tracking-wider">
-              Primary City / Region of Operation
-            </label>
-            <input
-              type="text"
-              autoComplete="address-level2"
-              value={city}
-              onChange={(e) => setCity(e.target.value)}
-              onFocus={(e) => {
-                if (typeof window !== "undefined" && window.innerWidth < 768) {
-                  e.target.scrollIntoView({ behavior: "smooth", block: "center" });
-                }
-              }}
-              placeholder="e.g. Chennai, Bangalore, Hyderabad"
-              className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
-            />
-          </div>
+        </div>
+
+        {/* City */}
+        <div>
+          <label className="block font-mono text-xs text-[#F7F1E8]/80 mb-2 uppercase tracking-wider">
+            Primary City / Region of Operation
+          </label>
+          <input
+            type="text"
+            autoComplete="address-level2"
+            value={city}
+            onChange={(e) => setCity(e.target.value)}
+            onFocus={(e) => {
+              if (typeof window !== "undefined" && window.innerWidth < 768) {
+                e.target.scrollIntoView({ behavior: "smooth", block: "center" });
+              }
+            }}
+            placeholder="e.g. Chennai, Bangalore, Hyderabad"
+            className="w-full bg-[#3B0000]/80 border border-[#F7F1E8]/20 rounded-xl px-4 py-3 text-sm text-[#F7F1E8] placeholder:text-[#F7F1E8]/30 focus:outline-none focus:border-[#F7F1E8]"
+          />
         </div>
 
         {/* Monthly Enquiry Volume */}
