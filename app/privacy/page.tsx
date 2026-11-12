@@ -110,23 +110,41 @@ export default function PrivacyPage() {
           </section>
 
           <section>
-            <h2 className="font-serif text-xl text-[#1A0505] mb-2">4. Third-Party Infrastructure</h2>
+            <h2 className="font-serif text-xl text-[#1A0505] mb-2">4. Third-Party Infrastructure &amp; Data Storage</h2>
             <p>
-              To deliver high-availability services, data is processed through established global
-              cloud providers (including Next.js/Vercel hosting, Resend email routing, Meta
-              WhatsApp Cloud APIs, and Google Cloud APIs). We do not warrant that all data resides
-              exclusively within India, as enterprise routing may utilize international data centers.
+              To deliver high-availability services, data is processed and stored through established
+              enterprise cloud providers:
             </p>
+            <ul className="list-disc pl-5 space-y-1">
+              <li>
+                <strong>Enquiry Storage:</strong> Visitor enquiry details (name, phone number, email
+                address, business or agency details, operating city, selected package/services, and project
+                message) are stored in Google Firebase / Cloud Firestore and used exclusively to evaluate
+                and respond to your enquiry.
+              </li>
+              <li>
+                <strong>Email Transmissions:</strong> Visitor confirmation emails and internal team notifications
+                are dispatched through Gmail SMTP infrastructure.
+              </li>
+              <li>
+                <strong>Application Hosting:</strong> Application hosting and edge delivery are provided via
+                Next.js on Vercel. We do not warrant that all network transit resides exclusively within India,
+                as enterprise routing may utilize international edge nodes.
+              </li>
+            </ul>
           </section>
 
           <section>
             <h2 className="font-serif text-xl text-[#1A0505] mb-2">5. Data Retention &amp; Rights</h2>
             <p>
-              We retain project correspondence and lead records for the operational duration
-              necessary to provide maintenance, satisfy client accounting, or comply with legal
-              mandates. We do not commit to specific automated deletion schedules. Clients and
-              prospects may request review, modification, or deletion of their stored contact data
-              by emailing our central desk.
+              Enquiry records stored in Firebase Firestore are retained for the operational duration necessary to
+              evaluate scope, provide maintenance, and service client accounts. Exact retention schedule:
+              {" "}<em>[RETENTION_PERIOD_PLACEHOLDER: To be defined by owner prior to final legal sign-off]</em>.
+              Visitors and clients may request the inspection, correction, or permanent deletion of their
+              stored contact and enquiry records at any time by emailing our central desk at{" "}
+              <a href={`mailto:${SITE.commonEmail}`} className="underline text-[#E60000]">
+                {SITE.commonEmail}
+              </a>.
             </p>
           </section>
 
