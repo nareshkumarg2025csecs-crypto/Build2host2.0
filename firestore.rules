@@ -1,0 +1,17 @@
+rules_version = '2';
+
+// NOTE ON DEPLOYING:
+// To deploy these security rules to your Firebase project, run:
+//   firebase deploy --only firestore:rules
+//
+// All client direct reads and writes are strictly denied.
+// All enquiries and administration actions are handled exclusively
+// via trusted server routes with Firebase Admin SDK.
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}
