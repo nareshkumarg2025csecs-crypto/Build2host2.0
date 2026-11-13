@@ -50,20 +50,17 @@ export function LoginForm() {
 
       const data = await res.json().catch(() => ({}));
       if (!res.ok) {
-        throw new Error(data.error || "Login verification failed");
+        throw new Error(data.error || "Invalid email or password.");
       }
 
       // Successfully authenticated & session cookie set
       window.location.href = "/admin";
     } catch (err: unknown) {
-      console.error("[Login Error]:", err);
-      let msg = "Invalid login credentials. Please check your email and password.";
+      let msg = "Invalid email or password.";
       if (err instanceof Error) {
-        if (err.message.includes("user-not-found") || err.message.includes("wrong-password") || err.message.includes("invalid-credential")) {
-          msg = "Invalid email or password.";
-        } else if (err.message.includes("Access denied")) {
+        if (err.message.includes("15 minutes") || err.message.includes("Too many")) {
           msg = err.message;
-        } else {
+        } else if (err.message.includes("Invalid")) {
           msg = err.message;
         }
       }

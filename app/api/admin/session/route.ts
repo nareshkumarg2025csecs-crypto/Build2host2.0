@@ -3,11 +3,54 @@ import { getAdminAuth } from "@/lib/firebase/admin";
 import {
   getUserRole,
   verifyAdminSession,
+  checkLoginRateLimit,
+  recordFailedLoginAttempt,
+  clearFailedLoginAttempts,
   SESSION_COOKIE_NAME,
   SESSION_COOKIE_EXPIRY,
 } from "@/lib/admin-auth";
+import { hashIp } from "@/lib/enquiry";
+
+function checkSameOrigin(req: NextRequest): boolean {
+  const origin = req.headers.get("origin");
+  const host = req.headers.get("host");
+
+  if (!origin || !host) {
+    // If no origin header (same-origin GET / non-CORS client), check referer
+    const referer = req.headers.get("referer");
+    if (!referer) return true; // Standard intra-app navigation
+    try {
+      const refHost = new URL(referer).host;
+      return refHost === host;
+    } catch {
+      return false;
+    }
+  }
+
+  try {
+    const originHost = new URL(origin).host;
+    return originHost === host;
+  } catch {
+    return false;
+  }
+}
 
 export async function POST(req: NextRequest) {
+  // 1. Enforce same-origin check
+  if (!checkSameOrigin(req)) {
+    return NextResponse.json(
+      { error: "Forbidden cross-origin request" },
+      { status: 403 }
+    );
+  }
+
+  const rawIp =
+    req.headers.get("x-forwarded-for")?.split(",")[0]?.trim() ||
+    req.headers.get("x-real-ip") ||
+    "127.0.0.1";
+  const hashedIp = hashIp(rawIp);
+  const ipRateLimitKey = `login_ip_${hashedIp}`;
+
   try {
     let body;
     try {
@@ -17,82 +60,112 @@ export async function POST(req: NextRequest) {
     }
 
     let idToken = body.idToken;
+    const email = typeof body.email === "string" ? body.email.trim().toLowerCase() : "";
+    const password = typeof body.password === "string" ? body.password : "";
+    const emailRateLimitKey = email ? `login_email_${email}` : null;
 
-    // Server-side fallback authentication if client SDK was blocked by adblockers or network filters
+    // 2. Check rate limit for IP and email (5 failures per 15 minutes)
+    const ipLimit = checkLoginRateLimit(ipRateLimitKey);
+    if (ipLimit.isLocked) {
+      return NextResponse.json(
+        { error: "Too many failed login attempts. Please try again in 15 minutes." },
+        { status: 429 }
+      );
+    }
+
+    if (emailRateLimitKey) {
+      const emailLimit = checkLoginRateLimit(emailRateLimitKey);
+      if (emailLimit.isLocked) {
+        return NextResponse.json(
+          { error: "Too many failed login attempts. Please try again in 15 minutes." },
+          { status: 429 }
+        );
+      }
+    }
+
+    // 3. Fallback: server-side authentication if client SDK was blocked
     if (!idToken) {
-      const email = typeof body.email === "string" ? body.email.trim() : "";
-      const password = typeof body.password === "string" ? body.password : "";
-
       if (!email || !password) {
-        return NextResponse.json({ error: "Missing login credentials" }, { status: 400 });
+        recordFailedLoginAttempt(ipRateLimitKey);
+        return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
       }
 
       const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
       if (!apiKey) {
-        return NextResponse.json({ error: "Firebase API key missing" }, { status: 500 });
+        return NextResponse.json({ error: "Authentication service unavailable" }, { status: 503 });
       }
 
-      const authRes = await fetch(
-        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            email,
-            password,
-            returnSecureToken: true,
-          }),
-        }
-      );
-
-      const authData = await authRes.json();
-      if (!authRes.ok || !authData.idToken) {
-        const errCode = authData.error?.message;
-        if (
-          errCode === "EMAIL_NOT_FOUND" ||
-          errCode === "INVALID_PASSWORD" ||
-          errCode === "INVALID_LOGIN_CREDENTIALS"
-        ) {
-          return NextResponse.json(
-            { error: "Invalid email or password." },
-            { status: 401 }
-          );
-        }
-        return NextResponse.json(
-          { error: errCode ? errCode.replace(/_/g, " ").toLowerCase() : "Authentication failed" },
-          { status: 401 }
+      let authRes;
+      try {
+        authRes = await fetch(
+          `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+              email,
+              password,
+              returnSecureToken: true,
+            }),
+          }
         );
+      } catch {
+        recordFailedLoginAttempt(ipRateLimitKey);
+        if (emailRateLimitKey) recordFailedLoginAttempt(emailRateLimitKey);
+        return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
+      }
+
+      const authData = await authRes.json().catch(() => ({}));
+      if (!authRes.ok || !authData.idToken) {
+        recordFailedLoginAttempt(ipRateLimitKey);
+        if (emailRateLimitKey) recordFailedLoginAttempt(emailRateLimitKey);
+        // Generic response: never reveal whether email exists
+        return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
       }
 
       idToken = authData.idToken;
     }
 
     if (!idToken || typeof idToken !== "string") {
-      return NextResponse.json({ error: "Missing idToken" }, { status: 400 });
+      recordFailedLoginAttempt(ipRateLimitKey);
+      if (emailRateLimitKey) recordFailedLoginAttempt(emailRateLimitKey);
+      return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 
+    // 4. Verify ID token and Allowlist on the server
     const auth = getAdminAuth();
-    const decodedToken = await auth.verifyIdToken(idToken);
-
-    if (!decodedToken.email) {
-      return NextResponse.json(
-        { error: "Firebase account must have an associated email" },
-        { status: 400 }
-      );
+    let decodedToken;
+    try {
+      decodedToken = await auth.verifyIdToken(idToken);
+    } catch {
+      recordFailedLoginAttempt(ipRateLimitKey);
+      if (emailRateLimitKey) recordFailedLoginAttempt(emailRateLimitKey);
+      return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 
-    const role = getUserRole(decodedToken.email);
+    if (!decodedToken || !decodedToken.email) {
+      recordFailedLoginAttempt(ipRateLimitKey);
+      if (emailRateLimitKey) recordFailedLoginAttempt(emailRateLimitKey);
+      return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
+    }
+
+    const tokenEmail = decodedToken.email.toLowerCase().trim();
+    const tokenEmailKey = `login_email_${tokenEmail}`;
+
+    const role = getUserRole(tokenEmail);
     if (!role) {
-      console.warn(
-        `[Admin Session] Rejected login for ${decodedToken.email}: not in ADMIN_EMAILS allowlist`
-      );
-      return NextResponse.json(
-        { error: "Access denied. Your email is not permitted to access this admin panel." },
-        { status: 403 }
-      );
+      recordFailedLoginAttempt(ipRateLimitKey);
+      recordFailedLoginAttempt(tokenEmailKey);
+      // Generic error: never leak allowlist status
+      return NextResponse.json({ error: "Invalid email or password." }, { status: 401 });
     }
 
-    // Create session cookie with 5-day expiry
+    // 5. Successful authentication -> clear rate-limiting counters
+    clearFailedLoginAttempts(ipRateLimitKey);
+    clearFailedLoginAttempts(tokenEmailKey);
+    if (emailRateLimitKey) clearFailedLoginAttempts(emailRateLimitKey);
+
+    // 6. Create session cookie with 5-day expiry
     const sessionCookie = await auth.createSessionCookie(idToken, {
       expiresIn: SESSION_COOKIE_EXPIRY,
     });
@@ -100,7 +173,7 @@ export async function POST(req: NextRequest) {
     const isProd = process.env.NODE_ENV === "production";
     const res = NextResponse.json({
       ok: true,
-      email: decodedToken.email,
+      email: tokenEmail,
       role,
     });
 
@@ -116,9 +189,10 @@ export async function POST(req: NextRequest) {
 
     return res;
   } catch (err: unknown) {
-    console.error("[Admin Session Login Error]:", err);
+    recordFailedLoginAttempt(ipRateLimitKey);
+    console.error("[Admin Session Auth Exception]:", (err as any)?.message || "Internal auth failure");
     return NextResponse.json(
-      { error: "Authentication failed. Please verify credentials." },
+      { error: "Invalid email or password." },
       { status: 401 }
     );
   }
