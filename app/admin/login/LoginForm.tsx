@@ -18,19 +18,34 @@ export function LoginForm() {
     setLoading(true);
 
     try {
-      const auth = getClientFirebaseAuth();
-      const userCredential = await signInWithEmailAndPassword(
-        auth,
-        email.trim(),
-        password
-      );
+      let idToken: string | null = null;
 
-      const idToken = await userCredential.user.getIdToken();
+      // 1. Attempt Client Firebase Auth
+      try {
+        const auth = getClientFirebaseAuth();
+        const userCredential = await signInWithEmailAndPassword(
+          auth,
+          email.trim(),
+          password
+        );
+        idToken = await userCredential.user.getIdToken();
+      } catch (clientErr: unknown) {
+        // If client network is blocked by adblockers, Brave Shields, or CORS, fall back to direct session auth
+        console.warn(
+          "[Login Info] Client SDK blocked or offline, using server verification fallback:",
+          clientErr
+        );
+      }
+
+      // 2. Submit to session endpoint (either with idToken or direct credentials fallback)
+      const payload = idToken
+        ? { idToken }
+        : { email: email.trim(), password };
 
       const res = await fetch("/api/admin/session", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ idToken }),
+        body: JSON.stringify(payload),
       });
 
       const data = await res.json().catch(() => ({}));

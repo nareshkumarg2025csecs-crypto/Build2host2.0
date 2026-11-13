@@ -16,7 +16,57 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Invalid JSON format" }, { status: 400 });
     }
 
-    const { idToken } = body;
+    let idToken = body.idToken;
+
+    // Server-side fallback authentication if client SDK was blocked by adblockers or network filters
+    if (!idToken) {
+      const email = typeof body.email === "string" ? body.email.trim() : "";
+      const password = typeof body.password === "string" ? body.password : "";
+
+      if (!email || !password) {
+        return NextResponse.json({ error: "Missing login credentials" }, { status: 400 });
+      }
+
+      const apiKey = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+      if (!apiKey) {
+        return NextResponse.json({ error: "Firebase API key missing" }, { status: 500 });
+      }
+
+      const authRes = await fetch(
+        `https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=${apiKey}`,
+        {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            email,
+            password,
+            returnSecureToken: true,
+          }),
+        }
+      );
+
+      const authData = await authRes.json();
+      if (!authRes.ok || !authData.idToken) {
+        const errCode = authData.error?.message;
+        if (
+          errCode === "EMAIL_NOT_FOUND" ||
+          errCode === "INVALID_PASSWORD" ||
+          errCode === "INVALID_LOGIN_CREDENTIALS"
+        ) {
+          return NextResponse.json(
+            { error: "Invalid email or password." },
+            { status: 401 }
+          );
+        }
+        return NextResponse.json(
+          { error: errCode ? errCode.replace(/_/g, " ").toLowerCase() : "Authentication failed" },
+          { status: 401 }
+        );
+      }
+
+      idToken = authData.idToken;
+    }
+
     if (!idToken || typeof idToken !== "string") {
       return NextResponse.json({ error: "Missing idToken" }, { status: 400 });
     }
